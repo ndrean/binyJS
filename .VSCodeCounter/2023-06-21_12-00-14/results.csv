@@ -1,0 +1,15 @@
+"filename", "language", "JavaScript", "JSON", "CSS", "XML", "HTML", "comment", "blank", "total"
+"/Users/nevendrean/code/js/tinyjs/counter.js", "JavaScript", 9, 0, 0, 0, 0, 0, 1, 10
+"/Users/nevendrean/code/js/tinyjs/css/currentStyle.css", "CSS", 0, 0, 2, 0, 0, 0, 1, 3
+"/Users/nevendrean/code/js/tinyjs/css/main.css", "CSS", 0, 0, 26, 0, 0, 0, 1, 27
+"/Users/nevendrean/code/js/tinyjs/index.html", "HTML", 0, 0, 0, 0, 14, 0, 1, 15
+"/Users/nevendrean/code/js/tinyjs/javascript.svg", "XML", 0, 0, 0, 1, 0, 0, 0, 1
+"/Users/nevendrean/code/js/tinyjs/main.js", "JavaScript", 143, 0, 0, 0, 0, 3, 17, 163
+"/Users/nevendrean/code/js/tinyjs/package-lock.json", "JSON", 0, 788, 0, 0, 0, 0, 1, 789
+"/Users/nevendrean/code/js/tinyjs/package.json", "JSON", 0, 18, 0, 0, 0, 0, 1, 19
+"/Users/nevendrean/code/js/tinyjs/public/vite.svg", "XML", 0, 0, 0, 1, 0, 0, 0, 1
+"/Users/nevendrean/code/js/tinyjs/src/constants.js", "JavaScript", 56, 0, 0, 0, 0, 0, 2, 58
+"/Users/nevendrean/code/js/tinyjs/src/tiny.js", "JavaScript", 196, 0, 0, 0, 0, 17, 26, 239
+"/Users/nevendrean/code/js/tinyjs/src/todo.js", "JavaScript", 54, 0, 0, 0, 0, 4, 8, 66
+"/Users/nevendrean/code/js/tinyjs/style.css", "CSS", 0, 0, 86, 0, 0, 0, 12, 98
+"Total", "-", 458, 806, 114, 2, 14, 24, 71, 1489
