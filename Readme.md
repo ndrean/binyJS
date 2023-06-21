@@ -1,6 +1,12 @@
-# Reactivity pattern
+# BinyJS
 
-Test mode for <https://github.com/krausest/js-framework-benchmark>
+It is a vanilla Javascript project to write reactive UI. It is under 200 LOC.
+
+There is no templating: you write HTML as a string and pass in variables by normal interpolation. Reactivity arises when you use state variables, setup the related actions and target to this state and set some`dataset`in the HTML to link the components with the action and target.
+
+> This library heavily relies on _unique IDs_ when dealing with lists.
+
+## Reactivity pattern
 
 We use the simple `event` way. The flow is:
 
@@ -11,3 +17,11 @@ We use the simple `event` way. The flow is:
 - this target has an "onchange" listener which runs a function,
 - this function will update the `.resp` key of the state object,
 - the state setter will run a function to update the DOM.
+
+## Examples
+
+A basic "todo" list is given, as well as the bench framework test (<https://github.com/krausest/js-framework-benchmark>).
+
+## Test
+
+Test mode for <https://github.com/krausest/js-framework-benchmark>

@@ -1,4 +1,5 @@
-import B from "../src/biny.js";
+// import B from "../src/biny.js";
+import B from " binyjs@0.1.0";
 
 let i = 0;
 const todoState = B.state({ val: [], action: "append" }),
