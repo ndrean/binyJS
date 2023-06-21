@@ -20,8 +20,10 @@ We use the simple `event` way. The flow is:
 
 ## Examples
 
-A basic "todo" list is given, as well as the bench framework test (<https://github.com/krausest/js-framework-benchmark>).
+- a basic "todo" list is given: <https://github.com/ndrean/binyJS/blob/main/examples/todo.js>
+
+- the bench framework test: <https://github.com/ndrean/binyJS/blob/main/examples/bench.js> as found in (<https://github.com/krausest/js-framework-benchmark>).
 
 ## Test
 
-Test mode for <https://github.com/krausest/js-framework-benchmark>
+Todo: <https://github.com/krausest/js-framework-benchmark>
