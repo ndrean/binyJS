@@ -92,13 +92,13 @@ const actionsProto = {
 const Actions = (funcs) => (actionsProto.actions = funcs);
 
 async function ParseListeners(dom) {
-  return new Promise((resolve) =>
-    setTimeout(() => {
+  return new Promise(() => {
+    return setTimeout(() => {
       for (let node of [...dom.querySelectorAll(`[data-change]`)]) {
         node.onchange = actionsProto.actions[node.dataset.change];
       }
-    }, 0)
-  );
+    });
+  }, 0);
 }
 
 // ---- parsing string -> Node
