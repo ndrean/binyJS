@@ -4,6 +4,7 @@
   "version": "0.1.1",
   "description": "yet another reactive components library",
   "main": "./src/biny.js",
+  "author": "Neven Drean",
   "repository": {
     "type": "git",
     "url": "https://github.com/ndrean/binyJS"
@@ -18,7 +19,7 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
-    "binyjs": "^0.1.0",
+    "binyjs": "^0.1.1",
     "bootstrap": "^3.3.6"
   }
 }

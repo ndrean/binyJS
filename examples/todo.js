@@ -1,5 +1,5 @@
 // import B from "../src/biny.js";
-import B from " binyjs@0.1.0";
+import B from "binyjs";
 
 let i = 0;
 const todoState = B.state({ val: [], action: "append" }),
@@ -46,6 +46,8 @@ const TodoItem = ({ id, label }) =>
 window.addEventListener("load", () => {
   todoState.target = ulis;
   inputState.target = todoInput;
+
+  todoInput.focus();
 
   document.addEventListener("input", ({ data, target }) => {
     // delete is a checkbox, responds first change, then input.
