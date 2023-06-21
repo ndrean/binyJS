@@ -1,4 +1,4 @@
-import B from "binyjs";
+import B from "../src/biny.js";
 import { A, N, C } from "./constants.js";
 
 let nextId = 1;

@@ -1,5 +1,5 @@
 // import B from "../src/biny.js";
-import B from "binyjs";
+import B from "../src/biny.js";
 
 let i = 0;
 const todoState = B.state({ val: [], action: "append" }),
@@ -25,11 +25,12 @@ const todoState = B.state({ val: [], action: "append" }),
 
 const TodoItem = ({ id, label }) =>
     `<li id=${id}>
-    <div style="display:flex;">
-      <label style="margin-right:10px;">${label}</label>
-      <input type="checkbox" id="ckb" value=${inputState.val}>
-    </div>
-  </li>`,
+      <span style="display:flex;">
+        <label style="margin-right:10px;">${label}</label>
+        <input type="checkbox" id="ckb" value=${inputState.val}/>
+      </span>
+    </li>
+  `,
   App = () =>
     `<div>
       <h1>Todo list minimal example with Tiny</h1>

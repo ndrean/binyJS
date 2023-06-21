@@ -104,16 +104,14 @@ async function ParseListeners(dom) {
 // ---- parsing string -> Node
 
 function parse(dom, result) {
-  const map = {
-    TBODY: new DOMParser()
-      .parseFromString(`<table><tbody>${result}</tbody></table>`, "text/html")
-      .querySelector("tbody"),
-    //  DISABLE FOR THE TEST. Used it todo test -> ok
-    UL: new DOMParser()
-      .parseFromString(`<ul>${result}</ul>`, "text/html")
-      .querySelector("ul"),
-  };
-  return map[dom.tagName].childNodes;
+  const tag = dom.tagName;
+  return tag === "TBODY"
+    ? new DOMParser()
+        .parseFromString(`<table><tbody>${result}</tbody></table>`, "text/html")
+        .querySelector("tbody").childNodes
+    : new DOMParser()
+        .parseFromString(`<${tag}>${result}</${tag}>`, "text/html")
+        .querySelector(tag).childNodes;
 }
 
 // --- rendering
