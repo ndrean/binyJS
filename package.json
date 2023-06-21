@@ -2,6 +2,12 @@
   "name": "binyjs",
   "private": true,
   "version": "0.1.0",
+  "description": "yet another reactive components library",
+  "main": "./src/biny.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ndrean/binyJS"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
