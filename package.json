@@ -1,6 +1,6 @@
 {
   "name": "binyjs",
-  "private": true,
+  "private": false,
   "version": "0.1.0",
   "description": "yet another reactive components library",
   "main": "./src/biny.js",
