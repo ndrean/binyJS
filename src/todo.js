@@ -1,9 +1,9 @@
-import T from "./tiny.js";
+import B from "./biny.js";
 
 let i = 0;
-const todoState = T.state({ val: [], action: "append" }),
-  inputState = T.state({ val: "", action: "input" }),
-  actions = T.Actions({
+const todoState = B.state({ val: [], action: "append" }),
+  inputState = B.state({ val: "", action: "input" }),
+  actions = B.Actions({
     setInput: (data) => (inputState.val = data),
     removeLi: (li) => {
       const idx = todoState.val.findIndex((td) => td.id === Number(li.d));

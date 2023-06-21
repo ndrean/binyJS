@@ -113,8 +113,7 @@ function parse(dom, result) {
       .parseFromString(`<ul>${result}</ul>`, "text/html")
       .querySelector("ul"),
   };
-  const x = map[dom.tagName];
-  return x.childNodes;
+  return map[dom.tagName].childNodes;
 }
 
 // --- rendering

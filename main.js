@@ -1,4 +1,4 @@
-import T from "./src/tiny.js";
+import B from "./src/biny.js";
 import { A, N, C } from "./src/constants.js";
 
 let nextId = 1;
@@ -49,11 +49,11 @@ function swap() {
     : data.val;
 }
 
-const data = T.state({ val: buildData(0) }),
-  select = T.state({ val: 0 });
+const data = B.state({ val: buildData(0) }),
+  select = B.state({ val: 0 });
 // wrap all actions inside the T.Actions
 
-const actions = T.Actions({
+const actions = B.Actions({
   clear: () => ((data.target = tbody), (select.val = 0), (data.val = [])),
   select: ({ target }) => {
     document.querySelector(`[id="${select.val}"]`)?.classList.remove("danger");
@@ -100,7 +100,7 @@ const App = () => `
 <div class="container">
     <div class="jumbotron"><div class="row">
         <div class="col-md-6">
-            <h1>Tiny keyed</h1>
+            <h1>BinyJS keyed</h1>
         </div>
         <div class="col-md-6"><div class="row">
             ${Button({
