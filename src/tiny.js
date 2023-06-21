@@ -129,7 +129,7 @@ function handleAction({
   const ActionMapping = {
     inc: () => (dom.innerHTML = response),
     create: () => (
-      ParseListeners(dom), dom.replaceChildren(...parse(dom, response))
+      dom.replaceChildren(...parse(dom, response)), ParseListeners(dom)
     ),
     append: () => (dom.append(...parse(dom, response)), ParseListeners(dom)),
     clear: () => {
