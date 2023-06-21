@@ -101,11 +101,6 @@ async function ParseListeners(dom) {
   );
 }
 
-function parseListeners(dom) {
-  for (let node of [...dom.querySelectorAll(`[data-change]`)]) {
-    node.onchange = actionsProto.actions[node.dataset.change];
-  }
-}
 // ---- parsing string -> Node
 
 function parse(dom, result) {

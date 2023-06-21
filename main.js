@@ -65,7 +65,7 @@ const actions = T.Actions({
   append: ({ deps }) => (data.val = [...data.val, ...buildData(Number(deps))]),
   update: () => (data.val = update()),
   swap: () => (data.val = swap()),
-  // callbacks: return a concatenated string in "event.detail.response"
+  // callbacks: return  in "state.response"
   buildRows: () => (data.resp = data.val.map((item) => Row(item))),
   // {
   //   let r = "";
