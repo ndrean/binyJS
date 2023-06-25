@@ -53,12 +53,6 @@ const stateProto = {
     if (!v) return;
     key = this._key;
 
-    // if (this._action === "submit" && this._target) {
-    //   this._val = diffM(v, this.currVal, "id");
-    //   dispatch(this._target);
-    //   return (this.currVal = new Map([...v])), (this._val = v);
-    // }
-
     if (Array.isArray(v) && this._target) {
       const { diff, action, curM, swap } = getDiffs({
         v,
@@ -114,7 +108,6 @@ function parseListeners(dom) {
 window.addEventListener("load", () => parseListeners(app));
 
 // ---- parsing string -> Node
-
 function parse(dom, result) {
   const tag = dom.tagName;
   return tag === "TBODY"
@@ -139,33 +132,20 @@ function handleAction({ target: dom, response, renderAction, key, swap }) {
       dom.insertBefore(dom.children[n - 1], dom.children[o - 1]);
     },
     update: function () {
-      const newNodes = parse(dom, response);
-      const ids = [...newNodes].map((node) => node.id);
-      for (let newNode of [...newNodes]) {
-        dom.childNodes[newNode.id - ids[0]].replaceWith(newNode);
+      const newNodes = [...parse(dom, response)];
+      const initID = newNodes[0].getAttribute(key);
+      for (let newNode of newNodes) {
+        dom.childNodes[newNode.getAttribute(key) - initID].replaceWith(newNode);
       }
-
-      /*
-      const initID = getIdFromRow(response[0], key);
-      for (let newNode of response) {
-        // dom.querySelector(
-        //   `[${key}="${getIdFromRow(newNode, key)}"]`
-        // ).innerHTML = newNode;
-        dom.childNodes[getIdFromRow(newNode, key) - initID].innerHTML = newNode;
-      }
-      */
     },
   };
 
   Object.keys(ActionMapping).includes(renderAction) &&
     ActionMapping[renderAction]();
-  // window.requestAnimationFrame(ActionMapping[renderAction]);
 }
 
 //---  DIFFING FUNCTION ---
 function getDiffs({ v, curM, key }) {
-  window.performance.mark("start");
-
   if (!v.length == 0) {
     const initSize = curM.size,
       d = new Map(),
@@ -224,8 +204,6 @@ function getDiffs({ v, curM, key }) {
       ? (diff = [...clone.keys()])
       : (diff = [...d.keys()]);
 
-    performance.mark("end");
-    console.log(performance.measure("diff", "start", "end").duration);
     return {
       action,
       diff,
@@ -255,21 +233,13 @@ const createPartial = async (dom, elements) => {
     resolve(fgmt);
   });
 };
-*/
 
-/*
-    for (let i = 0; i < response.length; i += 1000) {
-      const res = await createPartial(dom, response.slice(i, i + 1000));
-      // i === 0 ? dom.replaceChildren(res) : dom.append(res);
-      dom.append(res);
-    }
-    */
-//  {
-//   const empty = dom.cloneNode();
-//   dom.parentElement.replaceChild(empty, dom);
-// },
-
-/*
+for (let i = 0; i < response.length; i += 1000) {
+  const res = await createPartial(dom, response.slice(i, i + 1000));
+  // i === 0 ? dom.replaceChildren(res) : dom.append(res);
+  dom.append(res);
+}
+    
 function getIdFromRow(row, key) {
   performance.mark("startregex");
   const rgxId = new RegExp(`\\s${key}=([^> ]*)`, "g");
