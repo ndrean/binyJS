@@ -1,4 +1,4 @@
-import B from "../src/biny.js";
+import B from "biny";
 // import B from "binyjs";
 
 let i = 0;
