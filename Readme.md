@@ -1,6 +1,10 @@
 # BinyJS
 
-It is a small vanilla Javascript project to write reactive UI. It is keyed (though any key can be used, not only an ID, but you need to declare it). You use datasets, state variables and global event listeners. It uses the event loop and a "diffing" function to detect which mutation you ran and perform the corresponding render action to the DOM on a selected target.
+It is a small vanilla Javascript project of 1.6kB (cf [bundlephobia](https://bundlephobia.com/package/binyjs@0.2.0)) to write reactive UI.
+
+It is _keyed_ though any key can be used, not only an ID, but you need to declare it.
+
+You use datasets, state variables and global event listeners. It uses the event loop and a "diffing" function to detect which mutation you ran and perform the corresponding render action to the DOM on a selected target.
 
 You write your components as HTML strings with normal interpolation. The other ingredients are:
 
