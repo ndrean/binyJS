@@ -6,7 +6,7 @@ There is no templating: you write HTML as a string and pass in variables by norm
 
 Reactivity arises since you use state variables.
 
-You setup the related actions in the HTML with `dataset`. You also link the components with the action and target.
+You set up the related actions in the HTML with `dataset`. You also link the components with the action and target.
 
 > This library heavily relies on _unique keys_ when dealing with lists.
 
@@ -15,7 +15,7 @@ You setup the related actions in the HTML with `dataset`. You also link the comp
 We use the simple `event` loop. The flow is:
 
 - an event is triggered (such as a "click"),
-- the EventListener on "click" runs a function as it reads the `dataset` of the `event.target`. You also setup the targeted component where to render.
+- the EventListener on "click" runs a function as it reads the `dataset` of the `event.target`. You also set up the targeted component where to render.
 - this function mutates a state object,
 - in the state update, you run a function to get calculate the **diff** between the "old" data and the "new" data.
 - this _diff_ function will detect the change: a clearall, a delete, an assign, an append, an update or a swap between rows.
@@ -27,6 +27,10 @@ We use the simple `event` loop. The flow is:
 ## Test
 
 Todo: <https://github.com/krausest/js-framework-benchmark>
+
+<img width="237" alt="Screenshot 2023-06-25 at 16 09 50" src="https://github.com/ndrean/binyJS/assets/6793008/7d944ccd-1437-49a9-9658-1b7648eb8de8">
+<img width="230" alt="Screenshot 2023-06-25 at 16 09 28" src="https://github.com/ndrean/binyJS/assets/6793008/33da3253-eec2-4d33-a6d1-51fc5d74cec2">
+
 
 ## Examples
 
