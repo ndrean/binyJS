@@ -28,8 +28,9 @@ Reactivity arises when you mutate state variable in your "data-action" functions
 
 The performance is close to the Vanilla [JS code specific for this test](https://github.com/krausest/js-framework-benchmark) to which we compare the Biny package.
 
-<img width="237" alt="Screenshot 2023-06-25 at 16 09 50" src="https://github.com/ndrean/binyJS/assets/6793008/7d944ccd-1437-49a9-9658-1b7648eb8de8">
-<img width="230" alt="Screenshot 2023-06-25 at 16 09 28" src="https://github.com/ndrean/binyJS/assets/6793008/33da3253-eec2-4d33-a6d1-51fc5d74cec2">
+<img width="202" alt="Screenshot 2023-06-26 at 13 17 10" src="https://github.com/ndrean/binyJS/assets/6793008/fd8b58a2-6752-4311-9520-957b86b14ccc">
+<img width="202" alt="Screenshot 2023-06-26 at 13 17 28" src="https://github.com/ndrean/binyJS/assets/6793008/8dc77a66-6975-4e83-8c3c-eb6df9d257a9">
+
 
 ## Examples
 
