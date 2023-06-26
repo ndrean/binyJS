@@ -1,14 +1,11 @@
-let key;
 const state = (stateObj) => Object.assign(Object.create(stateProto), stateObj);
 const stateProto = {
-  currVal: new Map(),
   get resp() {
     return this._resp;
   },
   set resp(r) {
     this._resp = r;
 
-    console.log(this.renderAction);
     this._resp &&
       this.renderAction &&
       this._target &&
@@ -49,46 +46,44 @@ const stateProto = {
     return this._val;
   },
   set val(v) {
-    // remove undefined on input
+    // remove undefined on input d
     if (!v) return;
-    key = this._key;
 
-    if (Array.isArray(v) && this._target) {
-      const { diff, action, curM, swap } = getDiffs({
-        v,
-        curM: this.currVal,
-        key,
-      });
+    const state = this,
+      key = state.key;
 
-      this.swap = swap;
-      this.currVal = curM;
-      this._val = diff ?? v;
-      this.renderAction = action;
+    if (Array.isArray(v)) {
+      !state.oldVal && (state.oldVal = new Map());
+
+      if (state.target) {
+        const { diff, action, curM, swap } = getDiffs({
+          v,
+          curM: new Map([...state.oldVal]),
+          key,
+        });
+
+        state.swap = swap;
+        state.oldVal = curM;
+        state._val = diff ?? v;
+        state.renderAction = action;
+      }
     } else {
-      console.log("Wilkomen");
+      state.oldVal = v;
     }
 
-    ["clear", "remove", "swap"].includes(this.renderAction)
+    ["clear", "remove", "swap"].includes(state.renderAction)
       ? handleAction({
-          target: this._target,
-          renderAction: this.renderAction,
-          key: this._key,
-          swap: this.swap,
+          target: state.target,
+          renderAction: state.renderAction,
+          key: state.key,
+          swap: state.swap,
         })
-      : this._target && dispatch(this._target);
+      : state.target && state.target.dispatchEvent(new Event("change"));
 
-    this._val = v;
-    this.currVal ||= !Array.isArray(v) && v;
+    state._val = v;
   },
 };
-// event "change" triggered on state change
-function dispatch(target) {
-  target.dispatchEvent(new Event("change"));
-}
 
-/* ----- 
-Initialize actions to setup "onchange" listeners after each rebuilt via the Actions
-------*/
 const actionsProto = {
     get actions() {
       return this._actions;
@@ -133,9 +128,11 @@ function handleAction({ target: dom, response, renderAction, key, swap }) {
     },
     update: function () {
       const newNodes = [...parse(dom, response)];
-      const initID = newNodes[0].getAttribute(key);
+      const initID = newNodes[0].getAttribute("key");
       for (let newNode of newNodes) {
-        dom.childNodes[newNode.getAttribute(key) - initID].replaceWith(newNode);
+        dom.childNodes[newNode.getAttribute("key") - initID].replaceWith(
+          newNode
+        );
       }
     },
   };
@@ -207,7 +204,7 @@ function getDiffs({ v, curM, key }) {
     return {
       action,
       diff,
-      curM: curM,
+      curM,
       swap: swap.sort(),
     };
   } else {

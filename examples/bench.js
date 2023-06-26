@@ -1,15 +1,14 @@
-import B from "biny";
+import B from "../src/biny";
 import { A, N, C } from "./constants.js";
 
-let nextId = 1,
-  key = "id";
+let nextId = 1;
 
 const random = (max) => Math.round(Math.random() * 1000) % max;
 const buildData = (count) => {
   const data = new Array(count);
   for (let i = 0; i < count; i++) {
     data[i] = {
-      [key]: nextId++,
+      id: nextId++,
       label: `${A[random(A.length)]} ${C[random(C.length)]} ${
         N[random(N.length)]
       }`,
@@ -22,48 +21,45 @@ function remove(target) {
   const tg = target.closest("tr");
   data.target = tg;
   // if used key="id", then simply tg.id instead of getAttribute
-  // const keyId = Number(tg.getAttribute(key));
-  if (select.val === tg.id) select.val = 0;
-  const idx = data.val.findIndex((d) => d[key] === Number(tg.id));
+  const keyId = Number(tg.getAttribute("key"));
+  if (select.val === keyId) select.val = 0;
+  const idx = data.val.findIndex((d) => d.id === keyId);
   return [...data.val.slice(0, idx), ...data.val.slice(idx + 1)];
 }
 
+//  !!! immutable way
 function update() {
-  const newData = data.val.slice(0);
-  for (let i = 0; i < newData.length; i += 10) {
-    const r = newData[i];
-    newData[i] = { [key]: r.id, label: r.label + " !!!" };
+  const cp = [...data.val];
+  for (let i = 0; i < cp.length; i += 10) {
+    const r = cp[i];
+    cp[i] = { id: r.id, label: r.label + " !!!" };
   }
-  return newData;
+  return cp;
 }
 
 let l = 999;
 function swap() {
   let len = data.val.length;
-  return len > l - 1
-    ? [
-        data.val[0],
-        data.val[l - 1],
-        ...data.val.slice(2, l - 1),
-        data.val[1],
-        ...data.val.slice(l, len),
-      ]
-    : data.val;
+  if (len < l - 1) {
+    return data.val;
+  } else {
+    let tmp = data.val[l - 1];
+    (data.val[l - 1] = data.val[1]), (data.val[1] = tmp);
+    return data.val;
+  }
 }
 
-const data = B.state({ val: [], key }),
-  select = B.state({ val: 0, key });
+const data = B.state({ val: [], key: "id" }),
+  select = B.state({ val: 0 });
 
 // wrap all actions inside the T.Actions
 
 const actions = B.Actions({
   clear: () => ((data.target = tbody), (select.val = 0), (data.val = [])),
   select: ({ target }) => {
-    document
-      .querySelector(`[${key}="${select.val}"]`)
-      ?.classList.remove("danger");
-    select.val = target.closest("tr").getAttribute(key);
-    document.querySelector(`[${key}="${select.val}"]`).classList.add("danger");
+    document.querySelector(`[key="${select.val}"]`)?.classList.remove("danger");
+    select.val = target.closest("tr").getAttribute("key");
+    document.querySelector(`[key="${select.val}"]`).classList.add("danger");
   },
   delete: ({ target }) => (data.val = remove(target)),
   create: ({ deps }) => (data.val = buildData(Number(deps))),
@@ -83,13 +79,12 @@ window.addEventListener("load", () => {
     data.target = tbody;
     data.action = action;
     select.action = action;
-    console.log(action);
     action && actions[action]({ target, deps });
   });
 });
 
 const Row = (item) =>
-  `<tr ${key}=${item[key]}><td class="col-md-1">${item[key]}</td><td class="col-md-4"><a data-action="select" >${item.label}</a></td><td class="col-md-1"><a data-action="delete"><span data-action="delete" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td><td class="col-md-6"></td></tr>`;
+  `<tr key="${item.id}"><td class="col-md-1">${item.id}</td><td class="col-md-4"><a data-action="select" >${item.label}</a></td><td class="col-md-1"><a data-action="delete"><span data-action="delete" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td><td class="col-md-6"></td></tr>`;
 
 const Button = ({ id, text, deps, action }) =>
   `<div class='col-sm-6 smallpad'><button id=${id} class="btn btn-primary btn-block" type="button" data-action=${action} data-deps=${deps} >${text}</button></div>`;
