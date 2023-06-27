@@ -1,9 +1,9 @@
-const A = (e) => Object.assign(Object.create(u), e), u = {
+const y = (t) => Object.assign(Object.create(A), t), A = {
   get resp() {
     return this._resp;
   },
-  set resp(e) {
-    this._resp = e, Array.isArray(e) || (this.renderAction = "assign", this._resp = [e]), this._resp && this._target && f({
+  set resp(t) {
+    this._resp = t, Array.isArray(t) || (this.renderAction = "assign", this._resp = [t]), this._resp && this._target && h({
       target: this._target,
       renderAction: this.renderAction,
       response: this._resp,
@@ -13,90 +13,96 @@ const A = (e) => Object.assign(Object.create(u), e), u = {
   get key() {
     return this._key;
   },
-  set key(e) {
-    this._key = e;
+  set key(t) {
+    this._key = t;
   },
   get deps() {
     return this._deps;
   },
-  set deps(e) {
-    this._deps = e;
+  set deps(t) {
+    this._deps = t;
   },
   get target() {
     return this._target;
   },
-  set target(e) {
-    this._target = e;
+  set target(t) {
+    this._target = t;
   },
   get action() {
     return this._action;
   },
-  set action(e) {
-    this._action = e;
+  set action(t) {
+    this._action = t;
   },
   get val() {
     return this._val;
   },
-  set val(e) {
-    const t = this, s = t.key ?? "id";
-    if (t._val = e, Array.isArray(e) && (!t.oldVal && (t.oldVal = /* @__PURE__ */ new Map()), t.target)) {
-      const { diff: l, action: a, curM: i, swap: o } = z({
-        v: e,
-        curM: new Map([...t.oldVal]),
-        key: s
+  set val(t) {
+    const e = this, i = e.key ?? "id";
+    if (e._val = t, Array.isArray(t) && (!e.oldVal && (e.oldVal = /* @__PURE__ */ new Map()), e.target)) {
+      const { diff: l, action: a, curM: s, swap: o } = z({
+        v: t,
+        curM: new Map([...e.oldVal]),
+        key: i
       });
-      t.swap = o, t.oldVal = i, t._val = l, t.renderAction = a;
+      e.swap = o, e.oldVal = s, e._val = l, e.renderAction = a;
     }
-    if (t.renderAction === "clear")
-      return f({
-        target: t.target,
-        renderAction: t.renderAction
+    if (e.renderAction === "clear")
+      return h({
+        target: e.target,
+        renderAction: e.renderAction
       });
-    t._val && (["remove", "swap"].includes(t.renderAction) ? f({
-      target: t.target,
-      renderAction: t.renderAction,
-      key: t.key,
-      swap: t.swap
-    }) : t.target && t.target.dispatchEvent(new Event("change"))), !Array.isArray(e) && (t.oldVal = e), t._val = e;
+    e._val && (["remove", "swap"].includes(e.renderAction) ? h({
+      target: e.target,
+      renderAction: e.renderAction,
+      key: e.key,
+      swap: e.swap
+    }) : e.target && e.target.dispatchEvent(new Event("change"))), !Array.isArray(t) && (e.oldVal = t), e._val = t;
   }
-}, h = {
+}, f = {
   get actions() {
     return this._actions;
   },
-  set actions(e) {
-    this._actions = e;
+  set actions(t) {
+    this._actions = t;
   }
-}, _ = (e) => h.actions = e;
-function g(e) {
-  for (let t of [...e.querySelectorAll("[data-change]")])
-    t.onchange = h.actions[t.dataset.change];
+}, _ = (t) => f.actions = t;
+function g(t) {
+  for (let e of [...t.querySelectorAll("[data-change]")])
+    e.onchange = f.actions[e.dataset.change];
+  for (let e of [...t.querySelectorAll("[data-input]")])
+    e.oninput = f.actions[e.dataset.input];
+  for (let e of [...t.querySelectorAll("[data-submit]")])
+    e.onsubmit = f.actions[e.dataset.submit];
+  for (let e of [...t.querySelectorAll("[data-click]")])
+    e.onclick = f.actions[e.dataset.click];
 }
 window.addEventListener("load", () => g(app));
-function w(e, t) {
-  const s = e.tagName;
-  return s === "TBODY" ? new DOMParser().parseFromString(`<table><tbody>${t}</tbody></table>`, "text/html").querySelector("tbody").childNodes : new DOMParser().parseFromString(`<${s}>${t}</${s}>`, "text/html").querySelector(s).childNodes;
+function w(t, e) {
+  const i = t.tagName;
+  return i === "TBODY" ? new DOMParser().parseFromString(`<table><tbody>${e}</tbody></table>`, "text/html").querySelector("tbody").childNodes : new DOMParser().parseFromString(`<${i}>${e}</${i}>`, "text/html").querySelector(i).childNodes;
 }
-function f({ target: e, response: t, renderAction: s, key: l, swap: a }) {
+function h({ target: t, response: e, renderAction: i, key: l, swap: a }) {
   ({
-    assign: () => e.innerHTML = t.join(""),
-    append: () => e.insertAdjacentHTML("beforeEnd", t.join("")),
-    clear: () => (e.innerHTML = "", g(document)),
-    remove: () => e.parentElement.removeChild(e),
+    assign: () => t.innerHTML = e.join(""),
+    append: () => t.insertAdjacentHTML("beforeEnd", e.join("")),
+    clear: () => (t.innerHTML = "", g(document)),
+    remove: () => t.parentElement.removeChild(t),
     swap: () => {
       const [o, n] = a;
-      e.insertBefore(e.children[o - 1], e.children[n - 1]), e.insertBefore(e.children[n - 1], e.children[o - 1]);
+      t.insertBefore(t.children[o - 1], t.children[n - 1]), t.insertBefore(t.children[n - 1], t.children[o - 1]);
     },
     update: function() {
-      const o = [...w(e, t)], n = o[0].getAttribute("key");
+      const o = [...w(t, e)], n = o[0].getAttribute("key");
       for (let c of o)
-        e.childNodes[c.getAttribute("key") - n].replaceWith(
+        t.childNodes[c.getAttribute("key") - n].replaceWith(
           c
         );
     }
-  })[s]();
+  })[i]();
 }
-function z({ v: e, curM: t, key: s }) {
-  if (e.length === 0 && t.size > 1)
+function z({ v: t, curM: e, key: i }) {
+  if (t.length === 0 && e.size > 1)
     return {
       action: "clear",
       curM: /* @__PURE__ */ new Map(),
@@ -104,33 +110,33 @@ function z({ v: e, curM: t, key: s }) {
       swap: void 0
     };
   {
-    const l = t.size, a = /* @__PURE__ */ new Map(), i = new Map([...t]), o = [];
-    for (let r of e)
-      t.has(r) ? i.delete(r) : (t.set(r, r[s]), a.set(r, r[s]));
-    if (i.size > 0)
-      for (let r of i.keys())
-        t.delete(r);
+    const l = e.size, a = /* @__PURE__ */ new Map(), s = new Map([...e]), o = [];
+    for (let r of t)
+      e.has(r) ? s.delete(r) : (e.set(r, r[i]), a.set(r, r[i]));
+    if (s.size > 0)
+      for (let r of s.keys())
+        e.delete(r);
     if (a.size == 0) {
-      let r = [...t.entries()].sort(
-        ([d, p], [y, b]) => d[s] < y[s] && -1
+      let r = [...e.entries()].sort(
+        ([d, p], [u, b]) => d[i] < u[i] && -1
       );
-      for (let [d, p] of [...e.entries()])
-        p[s] !== r[d][1] && (o.push(d + 1), t.set(r[d][0], p[s]));
+      for (let [d, p] of [...t.entries()])
+        p[i] !== r[d][1] && (o.push(d + 1), e.set(r[d][0], p[i]));
       r = [];
     }
     let n;
-    i.size == 1 && a.size == 0 ? n = "remove" : o.length > 0 ? n = "swap" : i.size == 0 && l > 0 ? n = "append" : i.size == 0 && l == 0 ? n = "assign" : i.size == a.size && a.size < t.size ? n = "update" : n = "assign";
+    s.size == 1 && a.size == 0 ? n = "remove" : o.length > 0 ? n = "swap" : s.size == 0 && l > 0 ? n = "append" : s.size == 0 && l == 0 ? n = "assign" : s.size == a.size && a.size < e.size ? n = "update" : n = "assign";
     let c;
-    return i.size > 0 && a.size == 0 ? c = [...i.keys()] : c = [...a.keys()], {
+    return s.size > 0 && a.size == 0 ? c = [...s.keys()] : c = [...a.keys()], {
       action: n,
       diff: c,
-      curM: t,
+      curM: e,
       swap: o.sort()
     };
   }
 }
 const k = {
-  state: A,
+  state: y,
   Actions: _
 };
 export {

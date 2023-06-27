@@ -1,4 +1,5 @@
-import B from "../src/biny.js";
+// import B from "../src/biny.js";
+import B from "binyjs";
 
 const selected = B.state({ val: "" }),
   listed = B.state({ val: "" }),
@@ -52,7 +53,7 @@ const Select = () =>
   <div id="fromselect" data-change="showSelected">
   </div>
   `;
-
+// variant with a submit to display the selected value
 const Datalist = () =>
   `<form id="form" data-submit="showListed">
   <label for="dt-input">Choose a country:</label>

@@ -1,4 +1,5 @@
-import B from "../src/biny";
+// import B from "../src/biny";
+import B from "binyjs";
 
 const mystate = B.state({ val: 0 }),
   actions = B.Actions({
