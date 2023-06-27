@@ -109,6 +109,15 @@ function parseListeners(dom) {
   for (let node of [...dom.querySelectorAll(`[data-change]`)]) {
     node.onchange = actionsProto.actions[node.dataset.change];
   }
+  for (let node of [...dom.querySelectorAll(`[data-input]`)]) {
+    node.oninput = actionsProto.actions[node.dataset.input];
+  }
+  for (let node of [...dom.querySelectorAll(`[data-submit]`)]) {
+    node.onsubmit = actionsProto.actions[node.dataset.submit];
+  }
+  for (let node of [...dom.querySelectorAll(`[data-click]`)]) {
+    node.onclick = actionsProto.actions[node.dataset.click];
+  }
 }
 
 window.addEventListener("load", () => parseListeners(app));

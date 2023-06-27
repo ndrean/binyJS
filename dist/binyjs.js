@@ -1,6 +1,4 @@
 const A = (e) => Object.assign(Object.create(u), e), u = {
-  // _val: stateObj?.val,
-  // _key: stateObj?.key,
   get resp() {
     return this._resp;
   },
@@ -40,8 +38,8 @@ const A = (e) => Object.assign(Object.create(u), e), u = {
     return this._val;
   },
   set val(e) {
-    const t = this, s = t.key;
-    if (Array.isArray(e) && (!t.oldVal && (t.oldVal = /* @__PURE__ */ new Map()), t.target)) {
+    const t = this, s = t.key ?? "id";
+    if (t._val = e, Array.isArray(e) && (!t.oldVal && (t.oldVal = /* @__PURE__ */ new Map()), t.target)) {
       const { diff: l, action: a, curM: i, swap: o } = z({
         v: e,
         curM: new Map([...t.oldVal]),
@@ -68,13 +66,13 @@ const A = (e) => Object.assign(Object.create(u), e), u = {
   set actions(e) {
     this._actions = e;
   }
-}, w = (e) => h.actions = e;
+}, _ = (e) => h.actions = e;
 function g(e) {
   for (let t of [...e.querySelectorAll("[data-change]")])
     t.onchange = h.actions[t.dataset.change];
 }
 window.addEventListener("load", () => g(app));
-function _(e, t) {
+function w(e, t) {
   const s = e.tagName;
   return s === "TBODY" ? new DOMParser().parseFromString(`<table><tbody>${t}</tbody></table>`, "text/html").querySelector("tbody").childNodes : new DOMParser().parseFromString(`<${s}>${t}</${s}>`, "text/html").querySelector(s).childNodes;
 }
@@ -89,7 +87,7 @@ function f({ target: e, response: t, renderAction: s, key: l, swap: a }) {
       e.insertBefore(e.children[o - 1], e.children[n - 1]), e.insertBefore(e.children[n - 1], e.children[o - 1]);
     },
     update: function() {
-      const o = [..._(e, t)], n = o[0].getAttribute("key");
+      const o = [...w(e, t)], n = o[0].getAttribute("key");
       for (let c of o)
         e.childNodes[c.getAttribute("key") - n].replaceWith(
           c
@@ -133,7 +131,7 @@ function z({ v: e, curM: t, key: s }) {
 }
 const k = {
   state: A,
-  Actions: w
+  Actions: _
 };
 export {
   k as default
