@@ -49,7 +49,7 @@ const stateProto = {
   },
   set val(v) {
     const state = this,
-      key = state.key;
+      key = state.key ?? "id";
 
     state._val = v;
 

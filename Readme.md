@@ -2,11 +2,18 @@
 
 It is a small vanilla Javascript project of 1.3kB (cf [bundlephobia](https://bundlephobia.com/package/binyjs@0.3.1)) to help to write reactive UI.
 
+You write HTML as strings with normal interpolation. It uses state variables with the convention of using `.val` as a stter and getter. It uses the convention of a `data-change` dataset where you want reactivity, as well as the key `.resp` to set the rendered DOM elements. It relies on the event loop and on a "diffing" function on the data when you use arrays. For this reason, it relies on _unique keys_; you need to use the `key` attribute to identify each element of the rendered DOM array, and pass in the unique identifier you use in your data.
+
 ## Usage
 
 The package exports `state` and `Actions` to import and handle your state and action functions.
 
-> This library relies on _unique keys_ when dealing with lists.
+```js
+import B from "binyjs"
+
+const todos = B.state({val: [], key: "id"})
+const actions = B.Actions({remove: ()=> ...})
+```
 
 ## Example "button"
 
@@ -126,7 +133,7 @@ The performance is close to the Vanilla [JS code specific for this test](https:/
 <img width="203" alt="Screenshot 2023-06-27 at 13 33 33" src="https://github.com/ndrean/binyJS/assets/6793008/a869d1e1-9f04-42c9-b8b0-4e7f005c9b4b">
 
 <img width="202" alt="Screenshot 2023-06-26 at 13 17 28" src="https://github.com/ndrean/binyJS/assets/6793008/8dc77a66-6975-4e83-8c3c-eb6df9d257a9">
-
+ 
 ## Examples
 
 The running bench example:

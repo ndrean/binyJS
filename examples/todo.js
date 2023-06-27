@@ -55,7 +55,7 @@ window.addEventListener("load", () => {
       return actions.removeLi(target);
     }
   });
-  todoInput.addEventListener("input", ({ data, target }) => {
+  todoInput.addEventListener("input", ({ data }) => {
     inputState.target = todoInput;
     return actions.setInput(data);
   });
