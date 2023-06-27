@@ -78,7 +78,6 @@ window.addEventListener("load", () => {
       dataset: { action, deps },
     } = target;
 
-    console.log(target);
     data.target = tbody;
     data.action = action;
     select.action = action;

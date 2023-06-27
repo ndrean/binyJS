@@ -112,9 +112,9 @@ function parseListeners(dom) {
   for (let node of [...dom.querySelectorAll(`[data-change]`)]) {
     node.onchange = actionsProto.actions[node.dataset.change];
   }
-  for (let node of [...dom.querySelectorAll(`[data-select]`)]) {
-    node.onselect = actionsProto.actions[node.dataset.select];
-  }
+  // for (let node of [...dom.querySelectorAll(`[data-select]`)]) {
+  //   node.onselect = actionsProto.actions[node.dataset.select];
+  // }
 }
 
 window.addEventListener("load", () => parseListeners(app));

@@ -1,15 +1,28 @@
 {
   "name": "binyjs",
   "private": false,
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "yet another reactive components library",
-  "main": "./src/biny.js",
+  "main": "./dist/binyjs.umd.cjs",
   "author": "Neven Drean",
   "repository": {
     "type": "git",
     "url": "https://github.com/ndrean/binyJS"
   },
+  "bugs": {
+    "url": "https://github.com/ndrean/binyJS/issues"
+  },
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "module": "./dist/binyjs.js",
+  "exports": {
+    ".": {
+      "import": "./dist/binyjs.js",
+      "require": "./dist/binyjs.umd.cjs"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -19,7 +32,7 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
-    "binyjs": "^0.3.0",
+    "binyjs": "^0.3.1",
     "bootstrap": "^3.3.6"
   }
 }

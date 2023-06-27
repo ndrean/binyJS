@@ -1,6 +1,16 @@
 # BinyJS
 
-It is a small vanilla Javascript project of 1.3kB (cf [bundlephobia](https://bundlephobia.com/package/binyjs@0.3.0)) to write reactive UI.
+It is a small vanilla Javascript project of 1.3kB (cf [bundlephobia](https://bundlephobia.com/package/binyjs@0.3.1)) to write reactive UI.
+
+## Usage
+
+The package exports `state` and `Actions` to import and handle your state and action functions.
+
+Import the package:
+
+```js
+import B from "binyjs";
+```
 
 > This library heavily relies on _unique keys_ when dealing with lists.
 
@@ -18,7 +28,7 @@ import B from "binyjs";
 const todoState = B.state({ val: [], key: "id" });
 ```
 
-- [keys] Whenever you render a list of components, use the attribute `key` in the HTML string you want to render and in your _selectors_. You also need to declare the id used in your data. In the "todo" example, you render a "li" and your data is in the form "data = [{id:1, label: "ok},...]":
+- [keys] Whenever you render a list of components, use the attribute `key` in the HTML string you want to render and in your _selectors_. You also need to declare the id used in your data. In the "todo" example, you render a "li" and your data is in the form `data = [{id:1, label: "ok},...]` so use `key="${id}"` in this form (the " are important for the querySelectors).
 
 ```js
 const TodoItem = ({ id, label }) =>
