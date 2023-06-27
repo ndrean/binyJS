@@ -11,6 +11,13 @@ You write your components as HTML strings with normal interpolation. Avoid CRs a
 The other ingredients are:
 
 - [state variables] If say "data" is a state variable, you instantiate it to declare it with `data = B.state({val: [], key: "id"})` and you have a getter and a setter with "data.val". Immutability is required.
+
+```js
+import B from "binyjs";
+
+const todoState = B.state({ val: [], key: "id" });
+```
+
 - [keys] Whenever you render a list of components, use the attribute `key` in the HTML string you want to render and in your _selectors_. You also need to declare the id used in your data. In the "todo" example, you render a "li" and your data is in the form "data = [{id:1, label: "ok},...]":
 
 ```js
@@ -18,7 +25,15 @@ const TodoItem = ({ id, label }) =>
   `<li key="${id}"><span style="display:flex;"><label style="margin-right:10px;">${label}</label><input type="checkbox" id="ckb" data-action="removeLi" value=${inputState.val}/></spa n></li>`;
 ```
 
-- [data-action] These datasets link a component to an action that you will define; it looks like `data-action="create"` where "create" is the function you build. You will also need to declare the _targeted component_: this tells _where_ you want to render the reactive data. You can choose another name than "action".
+- [data-action] These datasets link a component to an action that you will define; it looks like `data-action="create"` where "create" is the function you build. You will also need to declare the _targeted component_: this tells _where_ you want to render the reactive data. You can choose another name than "action". You need to export the actions to the package; you do this with `Actions` as so:
+
+```js
+const actions = B.Actions({
+  removeLi: ()=> {...},
+ ...
+})
+```
+
 - [global listeners] You can have "click", "submit", "input". Inside your global listener, you must declare the target for each reactive state variable. The target contains the dataset, so you get the `data-action` that you must set. It looks like `data.target=tbody`. You can also declare extra dependencies via a dataset if your component requires to read data hardcoded in the DOM. In the "todo" example, you have:
 
 ```js
@@ -29,19 +44,20 @@ document.addEventListener("input", ({ data, target }) => {
 });
 ```
 
-- [data-change] These are callbacks you declare in the targeted component where the reactive data will be rendered. This function is attached to this "onchange" listener. It looks like `data-change="buildRows"` where the function "buildRows" will return an HTML string of the HTML you want to render. You need to return the data, normally HTML strings in the key "resp", so it looks like `data.resp=<p>...</p>`.
-
-In the "todo" example, you define a callback:
+- [data-change] These are callbacks you declare in the targeted component where the reactive data will be rendered. This function is attached to this "onchange" listener. It looks like `data-change="buildRows"` where the function "buildRows" will return an HTML string of the HTML you want to render. You need to return the data, normally HTML strings in the key "resp". In the "todo" example, you define a callback:
 
 ```js
 <ul id="ulis" data-change="display"></ul>
 ```
 
-and in the "actions", you define it:
+and in the "actions", you pass the future HTML to the `.resp` key of the state:
 
 ```js
-display: () =>
-(todoState.resp = todoState.val.map((todo) => TodoItem(todo))),
+const actions = B.Actions({
+  ...,
+  display: () =>
+  (todoState.resp = todoState.val.map((todo) => TodoItem(todo))),
+})
 ```
 
 Since the "data-action" targeted the "ulis" (`todoState.target = ulis`), this callback will run.
