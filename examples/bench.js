@@ -77,6 +77,7 @@ window.addEventListener("load", () => {
       dataset: { action, deps },
     } = target;
 
+    console.log(target);
     data.target = tbody;
     data.action = action;
     select.action = action;
@@ -84,8 +85,8 @@ window.addEventListener("load", () => {
   });
 });
 
-const Row = (item) =>
-  `<tr key="${item.id}"><td class="col-md-1">${item.id}</td><td class="col-md-4"><a data-action="select" >${item.label}</a></td><td class="col-md-1"><a data-action="delete"><span data-action="delete" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td><td class="col-md-6"></td></tr>`;
+const Row = ({ id, label }) =>
+  `<tr key="${id}"><td class="col-md-1">${id}</td><td class="col-md-4"><a data-action="select" >${label}</a></td><td class="col-md-1"><a data-action="delete"><span data-action="delete" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td><td class="col-md-6"></td></tr>`;
 
 const Button = ({ id, text, deps, action }) =>
   `<div class='col-sm-6 smallpad'><button id=${id} class="btn btn-primary btn-block" type="button" data-action=${action} data-deps=${deps} >${text}</button></div>`;

@@ -1,13 +1,20 @@
 const state = (stateObj) => Object.assign(Object.create(stateProto), stateObj);
+
 const stateProto = {
+  // _val: stateObj?.val,
+  // _key: stateObj?.key,
   get resp() {
     return this._resp;
   },
   set resp(r) {
     this._resp = r;
 
+    if (!Array.isArray(r)) {
+      this.renderAction = "assign";
+      this._resp = [r];
+    }
+
     this._resp &&
-      this.renderAction &&
       this._target &&
       handleAction({
         target: this._target,
@@ -46,9 +53,6 @@ const stateProto = {
     return this._val;
   },
   set val(v) {
-    // remove undefined on input d
-    if (!v) return;
-
     const state = this,
       key = state.key;
 
@@ -64,22 +68,32 @@ const stateProto = {
 
         state.swap = swap;
         state.oldVal = curM;
-        state._val = diff ?? v;
+        state._val = diff;
         state.renderAction = action;
       }
-    } else {
-      state.oldVal = v;
     }
 
-    ["clear", "remove", "swap"].includes(state.renderAction)
-      ? handleAction({
+    if (state.renderAction === "clear") {
+      return handleAction({
+        target: state.target,
+        renderAction: state.renderAction,
+      });
+    }
+
+    if (state._val) {
+      if (["remove", "swap"].includes(state.renderAction)) {
+        handleAction({
           target: state.target,
           renderAction: state.renderAction,
           key: state.key,
           swap: state.swap,
-        })
-      : state.target && state.target.dispatchEvent(new Event("change"));
+        });
+      } else {
+        state.target && state.target.dispatchEvent(new Event("change"));
+      }
+    }
 
+    !Array.isArray(v) && (state.oldVal = v);
     state._val = v;
   },
 };
@@ -97,6 +111,9 @@ const actionsProto = {
 function parseListeners(dom) {
   for (let node of [...dom.querySelectorAll(`[data-change]`)]) {
     node.onchange = actionsProto.actions[node.dataset.change];
+  }
+  for (let node of [...dom.querySelectorAll(`[data-select]`)]) {
+    node.onselect = actionsProto.actions[node.dataset.select];
   }
 }
 
@@ -136,17 +153,21 @@ function handleAction({ target: dom, response, renderAction, key, swap }) {
       }
     },
   };
-
-  Object.keys(ActionMapping).includes(renderAction) &&
-    ActionMapping[renderAction]();
+  ActionMapping[renderAction]();
 }
 
 //---  DIFFING FUNCTION ---
 function getDiffs({ v, curM, key }) {
-  if (!v.length == 0) {
+  if (v.length === 0 && curM.size > 1) {
+    return {
+      action: "clear",
+      curM: new Map(),
+      diff: undefined,
+      swap: undefined,
+    };
+  } else {
     const initSize = curM.size,
       d = new Map(),
-      s = new Map(),
       clone = new Map([...curM]),
       swap = [];
 
@@ -206,13 +227,6 @@ function getDiffs({ v, curM, key }) {
       diff,
       curM,
       swap: swap.sort(),
-    };
-  } else {
-    return {
-      action: "clear",
-      curM: new Map(),
-      diff: undefined,
-      swap: undefined,
     };
   }
 }
