@@ -26,13 +26,18 @@ const todoState = B.state({ val: [], key: "id" }),
   });
 
 const TodoItem = ({ id, label }) =>
-  `<li key="${id}"><span style="display:flex;"><label style="margin-right:10px;">${label}</label><input type="checkbox" id="ckb" data-action="removeLi" value=${inputState.val}/></spa n></li>`;
+  `<li key="${id}">
+  <span style="display:flex;">
+  <label style="margin-right:10px;">${label}</label>
+  <input type="checkbox"/>
+  </span>
+  </li>`;
 
 const App = () =>
   `<div>
       <h1>Todo list minimal example with Tiny</h1>
       <form data-action="addItem" id="fm">
-        <input type="text" id= "todoInput" data-action="setInput"/>
+        <input type="text" id= "todoInput" />
         <button id="btn" type="submit">Add</button>
       </form>
       <ul id="ulis" data-change="display"></ul>
@@ -42,25 +47,23 @@ const App = () =>
 // ------------
 
 window.addEventListener("load", () => {
-  inputState.target = todoInput;
   todoInput.focus();
 
   document.addEventListener("click", ({ target }) => {
-    todoState.target = ulis;
     // delete is a checkbox,
-    if (target.checked) {
-      return actions[target.dataset.action](target);
+    if (target.type === "checkbox" && target.checked) {
+      return actions.removeLi(target);
     }
   });
-  document.addEventListener("input", ({ data, target }) => {
-    todoState.target = ulis;
+  todoInput.addEventListener("input", ({ data, target }) => {
     inputState.target = todoInput;
-    return actions[target.dataset.action](data);
+    return actions.setInput(data);
   });
 
-  document.addEventListener("submit", (evt) => {
+  fm.addEventListener("submit", (evt) => {
     evt.preventDefault();
-    return actions[evt.target.dataset.action](evt);
+    todoState.target = ulis;
+    return actions.addItem();
   });
 });
 

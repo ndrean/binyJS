@@ -1,18 +1,13 @@
 const state = (stateObj) => Object.assign(Object.create(stateProto), stateObj);
 
 const stateProto = {
-  // _val: stateObj?.val,
-  // _key: stateObj?.key,
   get resp() {
     return this._resp;
   },
   set resp(r) {
     this._resp = r;
 
-    if (!Array.isArray(r)) {
-      this.renderAction = "assign";
-      this._resp = [r];
-    }
+    if (!Array.isArray(r)) (this.renderAction = "assign"), (this._resp = [r]);
 
     this._resp &&
       this._target &&
@@ -55,6 +50,8 @@ const stateProto = {
   set val(v) {
     const state = this,
       key = state.key;
+
+    state._val = v;
 
     if (Array.isArray(v)) {
       !state.oldVal && (state.oldVal = new Map());
@@ -112,9 +109,6 @@ function parseListeners(dom) {
   for (let node of [...dom.querySelectorAll(`[data-change]`)]) {
     node.onchange = actionsProto.actions[node.dataset.change];
   }
-  // for (let node of [...dom.querySelectorAll(`[data-select]`)]) {
-  //   node.onselect = actionsProto.actions[node.dataset.select];
-  // }
 }
 
 window.addEventListener("load", () => parseListeners(app));

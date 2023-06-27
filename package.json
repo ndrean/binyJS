@@ -1,7 +1,7 @@
 {
   "name": "binyjs",
   "private": false,
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "yet another reactive components library",
   "main": "./dist/binyjs.umd.cjs",
   "author": "Neven Drean",
@@ -32,7 +32,7 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
-    "binyjs": "^0.3.1",
+    "binyjs": "^0.3.2",
     "bootstrap": "^3.3.6"
   }
 }

@@ -1,82 +1,123 @@
 # BinyJS
 
-It is a small vanilla Javascript project of 1.3kB (cf [bundlephobia](https://bundlephobia.com/package/binyjs@0.3.1)) to write reactive UI.
+It is a small vanilla Javascript project of 1.3kB (cf [bundlephobia](https://bundlephobia.com/package/binyjs@0.3.1)) to help to write reactive UI.
 
 ## Usage
 
 The package exports `state` and `Actions` to import and handle your state and action functions.
 
-Import the package:
+> This library relies on _unique keys_ when dealing with lists.
+
+## Example "button"
+
+We want to display a button and increment the count on each click. We start by defining the state and actions.
 
 ```js
 import B from "binyjs";
+
+const mystate = B.state({ val: 0 }),
+  actions = B.Actions({
+    inc: () => (mystate.val += 1),
+    display: () =>
+      (mystate.resp = `<span>binyJS state is: ${mystate.val}</span>`),
+  });
 ```
 
-> This library heavily relies on _unique keys_ when dealing with lists.
+Our HTML template is as below. We define the dataset `data-change`. This will insert an `onchange` listener in the component you will declare
 
-You use datasets, state variables and global event listeners. The state is required to be immutable. It uses the event loop and a "diffing" function to detect which mutation you made. It then runs the corresponding render action to the DOM on a selected target.
+```js
+app.innerHTML = `
+  <div>
+    <h1>Hello biny</h1>
+    <div>
+      <button id="counter" type="button">
+      <span data-change="display" id="count"></span>
+      </button>
+    </div> 
+  </div>
+`;
+```
+
+The span element "#count" is declared as the _target_ for this state. It contains the dataset `data-change="display"`. This defines an "onchange" callback to run the "display" function. It will populate the "#count" element.
+
+```js
+window.onload = () => {
+  mystate.target = count;
+  actions.display();
+  counter.addEventListener("click", () => {
+    actions.inc();
+  });
+};
+```
+
+## Ingredients
+
+The state is required to be immutable. You use datasets, state variables and event listeners. It uses the event loop and a "diffing" function to detect which mutation you made. It then runs the corresponding render action to the DOM on a selected target.
 
 You write your components as HTML strings with normal interpolation. Avoid CRs and whitespaces between your HTML tags.
 
-The other ingredients are:
+The main ingredients are:
 
-- [state variables] If say "data" is a state variable, you instantiate it to declare it with `data = B.state({val: [], key: "id"})` and you have a getter and a setter with "data.val". Immutability is required.
+- [state variables] declared with e.g. `counter = B.state({val: 0})` and `.val` is a setter and getter.
+- [actions] declared in the function `B.Actions`.
 
 ```js
-import B from "binyjs";
+const actions = B.Actions({removeLi: ()=> {...},...})
+```
 
+- [keys] Whenever you render a list of components, use the attribute `key` in the HTML string you want to render and in your _selectors_. You also need to declare the id used in your data. In the "todo" example, you render a few "li" and your data is in the form `data = [{id:1, label: "ok},...]` then you need to declare `key="${id}"` to the state that will control this rendering.Note that the " are important for the querySelectors.
+
+```js
 const todoState = B.state({ val: [], key: "id" });
 ```
 
-- [keys] Whenever you render a list of components, use the attribute `key` in the HTML string you want to render and in your _selectors_. You also need to declare the id used in your data. In the "todo" example, you render a "li" and your data is in the form `data = [{id:1, label: "ok},...]` so use `key="${id}"` in this form (the " are important for the querySelectors).
-
 ```js
 const TodoItem = ({ id, label }) =>
-  `<li key="${id}"><span style="display:flex;"><label style="margin-right:10px;">${label}</label><input type="checkbox" id="ckb" data-action="removeLi" value=${inputState.val}/></spa n></li>`;
+  `<li key="${id}">
+  <span style="display:flex;">
+  <label style="margin-right:10px;">${label}</label>
+  <input type="checkbox"/>
+  </span>
+  </li>`;
 ```
 
-- [data-action] These datasets link a component to an action that you will define; it looks like `data-action="create"` where "create" is the function you build. You will also need to declare the _targeted component_: this tells _where_ you want to render the reactive data. You can choose another name than "action". You need to export the actions to the package; you do this with `Actions` as so:
+- [event listeners] You use `document.addEventListener` in general as multiple components may emit the same event, even if sometimes you can be specific. Inside your listener, you must declare the **target** for each reactive **state** variable. It looks like `data.target=tbody`. You can also declare extra dependencies via a dataset if your component requires to read data hardcoded in the DOM. In the "todo" example, you have:
 
 ```js
-const actions = B.Actions({
-  removeLi: ()=> {...},
- ...
-})
-```
-
-- [global listeners] You can have "click", "submit", "input". Inside your global listener, you must declare the target for each reactive state variable. The target contains the dataset, so you get the `data-action` that you must set. It looks like `data.target=tbody`. You can also declare extra dependencies via a dataset if your component requires to read data hardcoded in the DOM. In the "todo" example, you have:
-
-```js
-document.addEventListener("input", ({ data, target }) => {
-  todoState.target = ulis;
+todoInput.addEventListener("input", ({ data, target }) => {
   inputState.target = todoInput;
-  return actions[target.dataset.action](data);
+  return actions.setInput(data);
 });
 ```
 
-- [data-change] These are callbacks you declare in the targeted component where the reactive data will be rendered. This function is attached to this "onchange" listener. It looks like `data-change="buildRows"` where the function "buildRows" will return an HTML string of the HTML you want to render. You need to return the data, normally HTML strings in the key "resp". In the "todo" example, you define a callback:
+- [data-change] You have two conventions used: `data-change` and `state.resp`. This dataset is used in the targeted component where you reactive data. This function is attached to an "onchange" listener. It looks like `data-change="buildRows"` where the function "buildRows" will return an HTML string of the HTML you want to render. You need to return the data, normally HTML strings in the key "`.resp`". For example, you define a component that should receive reactive data:
 
 ```js
 <ul id="ulis" data-change="display"></ul>
 ```
 
-and in the "actions", you pass the future HTML to the `.resp` key of the state:
+You added a `data-change` dataset. You declare the attached function "buildRows to the `.Actions` function where you pass the future HTML to the `.resp` key of the state:
 
 ```js
 const actions = B.Actions({
-  ...,
-  display: () =>
-  (todoState.resp = todoState.val.map((todo) => TodoItem(todo))),
-})
+  buildRows: () =>
+    (todoState.resp = todoState.val.map((todo) => TodoItem(todo))),
+});
 ```
 
-Since the "data-action" targeted the "ulis" (`todoState.target = ulis`), this callback will run.
+In the event listener, you need to link the state variable with the target: `todoState.target = ulis`.
 
-- You pass global event listeners ("click", "input", "change", "submit").
+```js
+fm.addEventListener("submit", (evt) => {
+  evt.preventDefault();
+  todoState.target = ulis;
+  return actions.addItem();
+});
+```
 
 ## Reactivity pattern
 
-Reactivity arises when you mutate state variables in your "data-action" functions. We use the simple `event` loop and a "diffing function". The flow follows a few conventions:
+We use the simple `event` loop and a "diffing function" to detect the 6 following changes made to the state: "assign", "append", "clear", "remove", "update" and "swap" (rows).
 
 ## Test
 
@@ -93,6 +134,8 @@ The running bench example:
 
 The code for the examples:
 
+- the famous counter: <https://github.com/ndrean/binyJS/blob/main/examples/button.js>
+-
 - a basic "todo" list: <https://github.com/ndrean/binyJS/blob/main/examples/todo.js>
 
 - the bench framework test: <https://github.com/ndrean/binyJS/blob/main/examples/bench.js>.
