@@ -1,6 +1,6 @@
 # BinyJS
 
-It is a small vanilla Javascript project of 1.6kB (cf [bundlephobia](https://bundlephobia.com/package/binyjs@0.2.0)) to write reactive UI.
+It is a small vanilla Javascript project of 1.3kB (cf [bundlephobia](https://bundlephobia.com/package/binyjs@0.3.0)) to write reactive UI.
 
 > This library heavily relies on _unique keys_ when dealing with lists.
 
@@ -69,3 +69,8 @@ The performance is close to the Vanilla [JS code specific for this test](https:/
 - select and datalist: <https://github.com/ndrean/binyJS/blob/main/examples/select.js>
   
 - TODOMVC
+
+## Size
+
+<img width="809" alt="Screenshot 2023-06-27 at 13 43 59" src="https://github.com/ndrean/binyJS/assets/6793008/e01ea587-3d09-4815-a354-4d2807255511">
+
