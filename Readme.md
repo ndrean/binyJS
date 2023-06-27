@@ -2,6 +2,8 @@
 
 It is a small vanilla Javascript project of 1.3kB (cf [bundlephobia](https://bundlephobia.com/package/binyjs@0.3.1)) to help to write reactive UI.
 
+![npm bundle size](https://img.badgesize.io/ndrean/binyjs/main/dist/binyjs.js?compression=gzip)
+
 You write HTML as strings with normal interpolation. It uses state variables with the convention of using `.val` as a setter and getter. It uses the convention of a `data-change` dataset where you want reactivity, as well as the key `.resp` to set the rendered DOM elements. It relies on the event loop and on a "diffing" function on the data when you use arrays. For this reason, it relies on _unique keys_; you need to use the `key` attribute to identify each element of the rendered DOM array, and pass in the unique identifier you use in your data.
 
 ## Usage
