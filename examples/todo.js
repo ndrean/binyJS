@@ -1,5 +1,5 @@
-import B from "../src/biny";
-// import B from "binyjs";
+// import B from "../src/biny";
+import B from "binyjs";
 
 let i = 0;
 const todoState = B.state({ val: [], key: "id" }),

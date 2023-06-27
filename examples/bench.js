@@ -1,7 +1,8 @@
-import B from "../src/biny";
+// import B from "../src/biny";
+import B from "binyjs";
 import { A, N, C } from "./constants.js";
 
-// "bootstrap": "^3.3.6"
+//
 let nextId = 1;
 
 const random = (max) => Math.round(Math.random() * 1000) % max;

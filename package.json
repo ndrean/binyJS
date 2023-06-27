@@ -19,6 +19,7 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
-    "binyjs": "^0.3.0"
+    "binyjs": "^0.3.0",
+    "bootstrap": "^3.3.6"
   }
 }
