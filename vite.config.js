@@ -8,5 +8,8 @@ export default defineConfig({
       name: "binyJS",
       fileName: "binyjs",
     },
+    rollupOptions: {
+      external: ["bootstrap"],
+    },
   },
 });
