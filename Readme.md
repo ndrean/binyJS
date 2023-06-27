@@ -11,7 +11,7 @@ You write your components as HTML strings with normal interpolation. Avoid CRs a
 The other ingredients are:
 
 - [state variables] If say "data" is a state variable, you instantiate it to declare it with `data = B.state({val: [], key: "id"})` and you have a getter and a setter with "data.val". Immutability is required.
-- [keys] Whenever you render a list of components, use the attribute `key` in the HTML string you want to render and in your _selectors_. You also need to declare the id used in your data. In the "todo" example, you render an "li" and your data is in the form "data = [{id:1, label: "ok},...]":
+- [keys] Whenever you render a list of components, use the attribute `key` in the HTML string you want to render and in your _selectors_. You also need to declare the id used in your data. In the "todo" example, you render a "li" and your data is in the form "data = [{id:1, label: "ok},...]":
 
 ```js
 const TodoItem = ({ id, label }) =>
@@ -19,7 +19,7 @@ const TodoItem = ({ id, label }) =>
 ```
 
 - [data-action] These datasets link a component to an action that you will define; it looks like `data-action="create"` where "create" is the function you build. You will also need to declare the _targeted component_: this tells _where_ you want to render the reactive data. You can choose another name than "action".
-- [global listeners] You can ahve "click", "submit", "input". Inside your global listener, you must declare the target for each reactive state variable. The target contains the dataset, so you get the `data-action` that you must set. It looks like `data.target=tbody`. You can also declare extra dependencies via a dataset if your component requires to read data hardcoded in the DOM. In the "todo" example, you have:
+- [global listeners] You can have "click", "submit", "input". Inside your global listener, you must declare the target for each reactive state variable. The target contains the dataset, so you get the `data-action` that you must set. It looks like `data.target=tbody`. You can also declare extra dependencies via a dataset if your component requires to read data hardcoded in the DOM. In the "todo" example, you have:
 
 ```js
 document.addEventListener("input", ({ data, target }) => {
@@ -29,7 +29,7 @@ document.addEventListener("input", ({ data, target }) => {
 });
 ```
 
-- [data-change] These are callbacks you declare in the targeted component where the reactive data will be rendered. This function attached to this "onchange" listener. It looks like `data-change="buildRows"` where the function "buildRows" will return an HTML string of the HTML you want to render. You need to return the data, normally HTML strings in the key "resp", so it looks like `data.resp=<p>...</p>`.
+- [data-change] These are callbacks you declare in the targeted component where the reactive data will be rendered. This function is attached to this "onchange" listener. It looks like `data-change="buildRows"` where the function "buildRows" will return an HTML string of the HTML you want to render. You need to return the data, normally HTML strings in the key "resp", so it looks like `data.resp=<p>...</p>`.
 
 In the "todo" example, you define a callback:
 
@@ -50,20 +50,22 @@ Since the "data-action" targeted the "ulis" (`todoState.target = ulis`), this ca
 
 ## Reactivity pattern
 
-Reactivity arises when you mutate state variable in your "data-action" functions. We use the simple `event` loop and a "diffing function". The flow follows a few conventions:
+Reactivity arises when you mutate state variables in your "data-action" functions. We use the simple `event` loop and a "diffing function". The flow follows a few conventions:
 
 ## Test
 
 The performance is close to the Vanilla [JS code specific for this test](https://github.com/krausest/js-framework-benchmark) to which we compare the Biny package.
 
-<img width="202" alt="Screenshot 2023-06-26 at 13 17 10" src="https://github.com/ndrean/binyJS/assets/6793008/fd8b58a2-6752-4311-9520-957b86b14ccc">
+<img width="203" alt="Screenshot 2023-06-27 at 13 33 33" src="https://github.com/ndrean/binyJS/assets/6793008/a869d1e1-9f04-42c9-b8b0-4e7f005c9b4b">
+
 <img width="202" alt="Screenshot 2023-06-26 at 13 17 28" src="https://github.com/ndrean/binyJS/assets/6793008/8dc77a66-6975-4e83-8c3c-eb6df9d257a9">
 
 ## Examples
 
-- a basic "todo" list is given: <https://github.com/ndrean/binyJS/blob/main/examples/todo.js>
+- a basic "todo" list: <https://github.com/ndrean/binyJS/blob/main/examples/todo.js>
 
 - the bench framework test: <https://github.com/ndrean/binyJS/blob/main/examples/bench.js>.
 
-- datalist
+- select and datalist: <https://github.com/ndrean/binyJS/blob/main/examples/select.js>
+  
 - TODOMVC
