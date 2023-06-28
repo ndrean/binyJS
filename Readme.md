@@ -1,9 +1,11 @@
 # BinyJS
 
-It is a small vanilla Javascript project of 1.4kB to help to write reactive UI.
+It is a micro vanilla Javascript project of 1.4kB to help to write reactive UI.
 [![npm bundle size](https://img.badgesize.io/ndrean/binyjs/main/dist/binyjs.umd.cjs?compression=gzip)](https://bundlephobia.com/package/binyjs@0.3.3)
 
-It can handle _arrays_ as demonstrated in the "JS-framework" bench test. It uses an immutable state and computes the diff to render the desired DOM elements.
+It can handle _arrays_ as demonstrated in the "JS-framework" bench test and it demonstrates its performance is very close to the dedicated JAvascript code written for this test.
+
+It uses an immutable state and computes the diff to render the desired DOM elements.
 
 You write HTML as strings with normal interpolation.
 
@@ -14,6 +16,8 @@ Instead of writing "event" listeners in your HTML (where "event" can be "click" 
 It uses the key "stateVariable"`.resp` to set the rendered DOM elements.
 
 It relies on _unique keys_; you need to use the `key` attribute in the HTML to identify each element of the rendered DOM array. You need to pass to the state variable the unique identifier you use in your data (eg `key: "id"`). Both "key" are different.
+
+> Limitations: it is not fully reactive in the sense that if you have a cascade of dependencies between state variables, then you need to be explicit and mutate the dependent state variable. For example, you have a list of todos, completed or not. Suppose you have a counter on the total completed todos as a state variable. In the action where you change the completion of a todo, you need to modify of the counter state accordingly for the counter to be reactive. The "todoMVC" demonstrates this.
 
 ## Usage
 
@@ -149,7 +153,6 @@ The performance is close to the Vanilla [JS code specific for this test](https:/
 
 <img width="262" alt="Screenshot 2023-06-28 at 11 01 24" src="https://github.com/ndrean/binyJS/assets/6793008/e0f1f777-00ef-49af-ace1-1f3d48c993f4">
 
- 
 ## Examples
 
 The running bench example:
@@ -164,5 +167,4 @@ The code for the examples:
 - the bench framework test: <https://github.com/ndrean/binyJS/blob/main/examples/bench.js>.
 
 - select and datalist: <https://github.com/ndrean/binyJS/blob/main/examples/select.js>
-  
 - TODOMVC
