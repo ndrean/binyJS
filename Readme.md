@@ -9,7 +9,7 @@ You write HTML as strings with normal interpolation.
 
 It uses state variables with the convention of using "stateVariable"`.val` as a setter and getter.
 
-Instead of writing "onevent" listeners in your HTML (where "event" can be "click" or "submit" or "change" or "input"), you write a `dataset`and reference a function.
+Instead of writing "event" listeners in your HTML (where "event" can be "click" or "submit" or "change" or "input"), you write a `dataset` and reference a function.
 
 It uses the key "stateVariable"`.resp` to set the rendered DOM elements.
 
@@ -86,7 +86,7 @@ const actions = B.Actions({
 })
 ```
 
-- [key] As a convention, Biny uses the attribute `key` in the HTML string when you render a collection: you need to declare `key="${id}"` if your data uses "id" as unique identifier. Note that the " are important for the querySelectors. Use it in your _selectors_.
+- [key] As a convention, Biny uses the attribute `key` in the HTML string when you render a collection: you need to declare `key="${id}"` if your data uses "id" as unique identifier. Note that the "is important for the querySelectors. Use it in your _selectors_.
 
 ```js
 const TodoItem = ({ id, label }) =>
@@ -99,7 +99,7 @@ const TodoItem = ({ id, label }) =>
   </li>`;
 ```
 
-- [data-event] Biny uses the convention `data-event` for an "onevent" listener. This means you use `data-click="addItem"` when the element emits a click event that should run the "addITem" action declared in you "Actions".
+- [data-event] Biny uses the convention `data-event` for an "event" listener. This means you use `data-click="addItem"` when the element emits a click event that should run the "addITem" action declared in your "Actions".
 - You can use global listeners (`element.addEventListener`).
 - [target] Inside your listener, you must declare the **target** for each reactive **state** variable. It looks like `data.target=tbody`. You can also declare extra dependencies via a dataset if your component requires to read data hardcoded in the DOM and read them.
 
@@ -145,9 +145,9 @@ We use the simple `event` loop and a "diffing function" to detect the 6 followin
 
 The performance is close to the Vanilla [JS code specific for this test](https://github.com/krausest/js-framework-benchmark) to which we compare the Biny package.
 
-<img width="203" alt="Screenshot 2023-06-27 at 13 33 33" src="https://github.com/ndrean/binyJS/assets/6793008/a869d1e1-9f04-42c9-b8b0-4e7f005c9b4b">
+<img width="927" alt="Screenshot 2023-06-13 at 17 24 25" src="https://github.com/ndrean/binyJS/assets/6793008/b3cd5c90-8dd8-4239-a3c4-fe74ff6fb9a2">
+<img width="262" alt="Screenshot 2023-06-28 at 11 01 24" src="https://github.com/ndrean/binyJS/assets/6793008/e0f1f777-00ef-49af-ace1-1f3d48c993f4">
 
-<img width="202" alt="Screenshot 2023-06-26 at 13 17 28" src="https://github.com/ndrean/binyJS/assets/6793008/8dc77a66-6975-4e83-8c3c-eb6df9d257a9">
  
 ## Examples
 
