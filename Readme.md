@@ -163,8 +163,5 @@ The code for the examples:
 - the bench framework test: <https://github.com/ndrean/binyJS/blob/main/examples/bench.js>.
 
 - select and datalist: <https://github.com/ndrean/binyJS/blob/main/examples/select.js>
+  
 - TODOMVC
-
-## Size
-
-<img width="809" alt="Screenshot 2023-06-27 at 13 43 59" src="https://github.com/ndrean/binyJS/assets/6793008/e01ea587-3d09-4815-a354-4d2807255511">
