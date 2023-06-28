@@ -145,7 +145,8 @@ We use the simple `event` loop and a "diffing function" to detect the 6 followin
 
 The performance is close to the Vanilla [JS code specific for this test](https://github.com/krausest/js-framework-benchmark) to which we compare the Biny package.
 
-<img width="927" alt="Screenshot 2023-06-13 at 17 24 25" src="https://github.com/ndrean/binyJS/assets/6793008/b3cd5c90-8dd8-4239-a3c4-fe74ff6fb9a2">
+<img width="244" alt="Screenshot 2023-06-28 at 11 07 25" src="https://github.com/ndrean/binyJS/assets/6793008/4a71c026-178b-4866-a1aa-07e754acbbe2">
+
 <img width="262" alt="Screenshot 2023-06-28 at 11 01 24" src="https://github.com/ndrean/binyJS/assets/6793008/e0f1f777-00ef-49af-ace1-1f3d48c993f4">
 
  
