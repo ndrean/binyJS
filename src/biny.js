@@ -106,6 +106,7 @@ const actionsProto = {
   Actions = (funcs) => (actionsProto.actions = funcs);
 
 function parseListeners(dom) {
+  console.log(dom);
   for (let node of [...dom.querySelectorAll(`[data-change]`)]) {
     node.onchange = actionsProto.actions[node.dataset.change];
   }
@@ -125,20 +126,28 @@ window.addEventListener("load", () => parseListeners(app));
 // ---- parsing string -> Node
 function parse(dom, result) {
   const tag = dom.tagName;
-  return tag === "TBODY"
-    ? new DOMParser()
+  let newDom;
+  tag === "TBODY"
+    ? (newDom = new DOMParser()
         .parseFromString(`<table><tbody>${result}</tbody></table>`, "text/html")
-        .querySelector("tbody").childNodes
-    : new DOMParser()
+        .querySelector("tbody"))
+    : (newDom = new DOMParser()
         .parseFromString(`<${tag}>${result}</${tag}>`, "text/html")
-        .querySelector(tag).childNodes;
+        .querySelector(tag));
+
+  parseListeners(newDom);
+  return newDom.childNodes;
 }
 
 // --- rendering
 function handleAction({ target: dom, response, renderAction, key, swap }) {
   const ActionMapping = {
-    assign: () => (dom.innerHTML = response.join("")),
-    append: () => dom.insertAdjacentHTML("beforeEnd", response.join("")),
+    assign: () => ((dom.innerHTML = response.join("")), parseListeners(dom)),
+    append: () => {
+      const newNodes = parse(dom, response);
+      dom.append(...newNodes);
+    },
+
     clear: () => ((dom.innerHTML = ""), parseListeners(document)),
     remove: () => dom.parentElement.removeChild(dom),
     swap: () => {
@@ -165,8 +174,8 @@ function getDiffs({ v, curM, key }) {
     return {
       action: "clear",
       curM: new Map(),
-      diff: undefined,
-      swap: undefined,
+      diff: [],
+      swap: [],
     };
   } else {
     const initSize = curM.size,

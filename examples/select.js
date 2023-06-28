@@ -19,9 +19,9 @@ const selected = B.state({ val: "" }),
     showListed: (e) => {
       e.preventDefault();
       form.reset();
-      listed.resp = `<p key="${listed.val}">${listed.val} ${
+      return (listed.resp = `<p key="${listed.val}">${listed.val} ${
         countries[listed.val]
-      }</p>`;
+      }</p>`);
     },
   });
 
@@ -62,7 +62,7 @@ const Datalist = () =>
   }"><datalist id="dataList">${displayOptions(countries)}</datalist>
   <button id="btn" type="submit">Add</button>
   </form>
-  <div id="fromlist"  data-change=""></div>`;
+  <div id="fromlist"></div>`;
 
 const App = () => `<div>${Select()}</div><hr/><br/><div>${Datalist()}</div>`;
 

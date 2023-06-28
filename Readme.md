@@ -1,15 +1,23 @@
 # BinyJS
 
-It is a small vanilla Javascript project of 1.3kB to help to write reactive UI.
+It is a small vanilla Javascript project of 1.4kB to help to write reactive UI.
 [![npm bundle size](https://img.badgesize.io/ndrean/binyjs/main/dist/binyjs.umd.cjs?compression=gzip)](https://bundlephobia.com/package/binyjs@0.3.3)
 
 It can handle _arrays_ as demonstrated in the "JS-framework" bench test. It uses an immutable state and computes the diff to render the desired DOM elements.
 
-You write HTML as strings with normal interpolation. It uses state variables with the convention of using `.val` as a setter and getter. It uses the convention of a `data-change` or `data-submit` or `data-input` with **dataset** where you want reactivity. It also uses the key `.resp` to set the rendered DOM elements. It relies on the event loop and on a "diffing" function on the data when you use arrays. For this reason, it relies on _unique keys_; you need to use the `key` attribute to identify each element of the rendered DOM array, and pass in the unique identifier you use in your data.
+You write HTML as strings with normal interpolation.
+
+It uses state variables with the convention of using "stateVariable"`.val` as a setter and getter.
+
+Instead of writing "onevent" listeners in your HTML (where "event" can be "click" or "submit" or "change" or "input"), you write a `dataset`and reference a function.
+
+It uses the key "stateVariable"`.resp` to set the rendered DOM elements.
+
+It relies on _unique keys_; you need to use the `key` attribute in the HTML to identify each element of the rendered DOM array. You need to pass to the state variable the unique identifier you use in your data (eg `key: "id"`). Both "key" are different.
 
 ## Usage
 
-You get `state` and `Actions` from the package. This handles your state and action functions.
+You get `state` and `Actions` from the package. You instantiate your state and action functions.
 
 ```js
 import B from "binyjs"
@@ -18,106 +26,72 @@ const todos = B.state({val: [], key: "id"})
 const actions = B.Actions({remove: ()=> ...})
 ```
 
-## Example: Counter#1
+## Example Counter
 
-We want to display a button and increment the count on each click. We start by defining the state and actions.
-
-```js
-import B from "binyjs";
-
-const mystate = B.state({ val: 0 }),
-  actions = B.Actions({
-    inc: () => (mystate.val += 1),
-    display: () =>
-      (mystate.resp = `<span>binyJS state is: ${mystate.val}</span>`),
-  });
-```
-
-Our HTML template is as below. We define the dataset `data-change`. This will insert an `onchange` listener in the component you will declare:
-
-```js
-app.innerHTML = `<div>
-    <h1>Hello biny</h1>
-    <div>
-      <button id="counter" type="button">
-      <span data-change="display" id="count"></span>
-      </button>
-    </div> 
-  </div>
-`;
-```
-
-We set up the "click" listener globally. The span element "#count" is declared as the _target_ for this state. It contains the dataset `data-change="display"`. This defines an "onchange" callback to run the "display" function. It will populate the "#count" element.
-
-```js
-window.onload = () => {
-  mystate.target = count;
-  actions.display();
-  counter.addEventListener("click", () => {
-    actions.inc();
-  });
-};
-```
-
-## Example Counter#2
-
-Instead of using a global listener, we can directly use a local listener when the elements are not dynamic.
-
-Consider the change:
+We want to render this HTML string:
 
 ```js
 app.innerHTML = `<div>
     <h1>Hello biny</h1>
     <div>
       <button id="counter" type="button" data-click="inc">
-                                                  ^^^
+                                            ^^^
       <span data-change="display" id="count"></span>
+               ^^^
       </button>
     </div> 
   </div>
 `;
 ```
 
-Then we need to set the target for the action. The code becomes:
+We build the state variable "counter", pass the actions into the "Actions" function and set up the _target_ for this state variable. We render an HTML string when we pass it to the `.resp` key of the state variable.
 
 ```js
-const mystate = B.state({ val: 0 }),
+const counter = B.state({ val: 0 }),
   actions = B.Actions({
-    inc: () => {
-      mystate.target = count;
-      mystate.val = mystate.val + 1;
-    },
+    inc: () => (counter.val += 1),
     display: () => {
-      mystate.target = count;
-      mystate.resp = `<span>binyJS state: ${mystate.val}</span>`;
+      // this action targets the "#count" element
+      counter.target = count;
+              ^^^
+      counter.resp = `<span>binyJS state: ${counter.val}</span>`;
+              ^^^
     },
   });
-// display the initial value of the counter
+// display the initial state on load.
 window.onload = () => actions.display();
 ```
 
 ## Ingredients
 
-The state is required to be immutable. You use datasets when the event emitters are "fiexd" in the DOM, meaning they are known on build. If the component is dynamically created and has an event emitter (eg a checkbox), then you need a global listener. The "todo" demonstrates this.
+The state is required to be immutable. The main ingredients are:
 
-The main ingredients are:
-
-- [state variables] declared with e.g. `counter = B.state({val: 0})` and `.val` is a setter and getter.
-- [actions] declared in the function `B.Actions`.
+- [state variables] You need to instantiate them. If say "data" is a state variable in the form of a collection of objects `[{id: 1, label: "..."},...]`, then `data.val` is a setter and getter. When your data is an array, set the unique identifier used by your data to the key "key".
 
 ```js
-const actions = B.Actions({removeLi: ()=> {...},...})
+const todoState = B.state({val: [], key: "id"})
+data.val = ...
 ```
 
-- [keys] Whenever you render a list of components, use the attribute `key` in the HTML string you want to render and in your _selectors_. You also need to declare the id used in your data. In the "todo" example, you render a few "li" and your data is in the form `data = [{id:1, label: "ok},...]` then you need to declare `key="${id}"` to the state that will control this rendering.Note that the " are important for the querySelectors.
+- [actions] declared in the function `B.Actions`. You need to set the _target_ to the state variable used in the action.
 
 ```js
-const todoState = B.state({ val: [], key: "id" });
+const actions = B.Actions({
+  removeLi: ()=> {
+    // the action targets the element "#ulis"
+    todoState.target = ulis;
+    ...
+  },
+  ...
+})
 ```
+
+- [key] As a convention, Biny uses the attribute `key` in the HTML string when you render a collection: you need to declare `key="${id}"` if your data uses "id" as unique identifier. Note that the " are important for the querySelectors. Use it in your _selectors_.
 
 ```js
 const TodoItem = ({ id, label }) =>
   `<li key="${id}">
+       ^^  ^     ^ 
   <span style="display:flex;">
   <label style="margin-right:10px;">${label}</label>
   <input type="checkbox"/>
@@ -125,43 +99,42 @@ const TodoItem = ({ id, label }) =>
   </li>`;
 ```
 
-- [data-submit] [data-input] [data-click] listeners. You have the convention `data-event` and the "onevent" listener. It requires the **target** to be set in the called function.
-- [data-change] is normally used as a callback.
-- You should use global listeners when the data is dynamically created, thus not present in the DOM on load.
-- [target] Inside your listener, you must declare the **target** for each reactive **state** variable. You can't declare before as the DOM is not loaded. It looks like `data.target=tbody`. You can also declare extra dependencies via a dataset if your component requires to read data hardcoded in the DOM. In the "todo" example, you have:
+- [data-event] Biny uses the convention `data-event` for an "onevent" listener. This means you use `data-click="addItem"` when the element emits a click event that should run the "addITem" action declared in you "Actions".
+- You can use global listeners (`element.addEventListener`).
+- [target] Inside your listener, you must declare the **target** for each reactive **state** variable. It looks like `data.target=tbody`. You can also declare extra dependencies via a dataset if your component requires to read data hardcoded in the DOM and read them.
 
-```js
-todoInput.addEventListener("input", ({ data, target }) => {
-  inputState.target = todoInput;
-  return actions.setInput(data);
-});
+- [state.resp] You need to return the data, normally HTML strings in the key "`.resp`".
+
+- [data-change] is the _default callback_. For example, you have a form with a `data-submit`:
+
+```html
+<form data-action="addItem" id="fm" data-submit="addItem"></form>
 ```
 
-- [state.resp] You need to return the data, normally HTML strings in the key "`.resp`". For example, you define a component that should receive reactive data:
+This triggers the action below:
 
 ```js
+addItem: (e) => {
+  e.preventDefault();
+  todoState.target = ulis;
+  todoState.val = [...todoState.val, { id: ++i, label: inputState.val }];
+  fm.reset(), (inputState.val = "");
+},
+```
+
+Since we send a new state, we want to render this new state. The target element "#ulis" contains a `data-change="display"`:
+
+```html
 <ul id="ulis" data-change="display"></ul>
 ```
 
-You added above a `data-change` dataset. You declare the attached function "buildRows to the `.Actions` function where you pass the future HTML to the `.resp` key of the state:
+Biny will run the callback "display":
 
 ```js
-const actions = B.Actions({
-  buildRows: () => {
-    todoState.target = ulis;
-    (todoState.resp = todoState.val.map((todo) => TodoItem(todo))),
-  }
-});
-```
-
-In the event listener, you need to link the state variable with the target: `todoState.target = ulis`.
-
-```js
-fm.addEventListener("submit", (evt) => {
-  evt.preventDefault();
+display: () => {
   todoState.target = ulis;
-  return actions.addItem();
-});
+  todoState.resp = todoState.val.map((todo) => TodoItem(todo));
+},
 ```
 
 ## Reactivity pattern

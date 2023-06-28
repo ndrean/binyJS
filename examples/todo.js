@@ -1,5 +1,5 @@
-import B from "../src/biny.js";
-// import B from "binyjs";
+// import B from "../src/biny.js";
+import B from "binyjs";
 
 let i = 0;
 const todoState = B.state({ val: [], key: "id" }),
@@ -9,8 +9,8 @@ const todoState = B.state({ val: [], key: "id" }),
       inputState.target = todoInput;
       inputState.val += data;
     },
-    removeLi: (target) => {
-      inputState.target = todoInput;
+    removeLi: ({ target }) => {
+      todoState.target = ulis;
       const li = target.closest("li");
       const keyId = Number(li.getAttribute("key"));
       todoState.target = li;
@@ -58,12 +58,12 @@ window.addEventListener("load", () => {
   todoInput.focus();
 
   // the "delete" checkbox is dynamically created and does not have a listener.
-  document.addEventListener("click", ({ target }) => {
-    // delete is a checkbox,
-    if (target.type === "checkbox" && target.checked) {
-      return actions.removeLi(target);
-    }
-  });
+  // document.addEventListener("click", ({ target }) => {
+  //   // delete is a checkbox,
+  //   if (target.type === "checkbox" && target.checked) {
+  //     return actions.removeLi(target);
+  //   }
+  // });
 });
 
 app.innerHTML = App();

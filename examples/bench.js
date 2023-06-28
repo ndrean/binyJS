@@ -1,4 +1,4 @@
-// import B from "../src/biny";
+// import B from "../src/biny.js";
 import B from "binyjs";
 import { A, N, C } from "./constants.js";
 
@@ -52,44 +52,43 @@ function swap() {
 }
 
 const data = B.state({ val: [], key: "id" }),
-  select = B.state({ val: 0 });
-
-// wrap all actions inside the T.Actions
-
-const actions = B.Actions({
-  clear: () => ((data.target = tbody), (select.val = 0), (data.val = [])),
-  select: ({ target }) => {
-    document.querySelector(`[key="${select.val}"]`)?.classList.remove("danger");
-    select.val = target.closest("tr").getAttribute("key");
-    document.querySelector(`[key="${select.val}"]`).classList.add("danger");
-  },
-  delete: ({ target }) => (data.val = remove(target)),
-  create: ({ deps }) => (data.val = buildData(Number(deps))),
-  append: ({ deps }) => (data.val = [...data.val, ...buildData(Number(deps))]),
-  update: () => (data.val = update()),
-  swap: () => (data.val = swap()),
-  // callbacks: return  in "state.response"
-  buildRows: () => (data.resp = data.val.map((item) => Row(item))),
-});
-
-window.addEventListener("load", () => {
-  document.addEventListener("click", ({ target }) => {
-    const {
-      dataset: { action, deps },
-    } = target;
-
-    data.target = tbody;
-    data.action = action;
-    select.action = action;
-    action && actions[action]({ target, deps });
+  select = B.state({ val: 0 }),
+  actions = B.Actions({
+    clear: () => ((data.target = tbody), (select.val = 0), (data.val = [])),
+    select: ({ target }) => {
+      console.log(target);
+      document
+        .querySelector(`[key="${select.val}"]`)
+        ?.classList.remove("danger");
+      select.val = target.closest("tr").getAttribute("key");
+      document.querySelector(`[key="${select.val}"]`).classList.add("danger");
+    },
+    delete: ({ target }) => {
+      data.val = remove(target);
+    },
+    create: (e) => {
+      data.target = tbody;
+      const deps = Number(e.target.dataset.deps);
+      data.val = buildData(deps);
+    },
+    append: () => {
+      data.target = tbody;
+      data.val = [...data.val, ...buildData(1000)];
+    },
+    update: () => (data.val = update()),
+    swap: () => (data.val = swap()),
+    // callbacks: return  in "state.response"
+    buildRows: () => {
+      data.target = tbody;
+      data.resp = data.val.map((item) => Row(item));
+    },
   });
-});
 
 const Row = ({ id, label }) =>
-  `<tr key="${id}"><td class="col-md-1">${id}</td><td class="col-md-4"><a data-action="select" >${label}</a></td><td class="col-md-1"><a data-action="delete"><span data-action="delete" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td><td class="col-md-6"></td></tr>`;
+  `<tr key="${id}"><td class="col-md-1">${id}</td><td class="col-md-4"><a data-click="select" >${label}</a></td><td class="col-md-1"><a data-click="delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td><td class="col-md-6"></td></tr>`;
 
 const Button = ({ id, text, deps, action }) =>
-  `<div class='col-sm-6 smallpad'><button id=${id} class="btn btn-primary btn-block" type="button" data-action=${action} data-deps=${deps} >${text}</button></div>`;
+  `<div class='col-sm-6 smallpad'><button id=${id} class="btn btn-primary btn-block" type="button" data-click=${action} data-deps=${deps} >${text}</button></div>`;
 
 const App = () =>
   `<div class="container"><div class="jumbotron"><div class="row"><div class="col-md-6"><h1>BinyJS keyed</h1></div><div class="col-md-6"><div class="row">${Button(
