@@ -77,13 +77,14 @@ const stateProto = {
       });
     }
 
-    if (state._val) {
-      if (["remove", "swap"].includes(state.renderAction)) {
+    if (state._val !== null || state._val !== undefined) {
+      if (state.renderAction === "swap") {
         handleAction({
           target: state.target,
           renderAction: state.renderAction,
           key: state.key,
           swap: state.swap,
+          response: state._val,
         });
       } else {
         state.target && state.target.dispatchEvent(new Event("change"));
@@ -106,7 +107,6 @@ const actionsProto = {
   Actions = (funcs) => (actionsProto.actions = funcs);
 
 function parseListeners(dom) {
-  console.log(dom);
   for (let node of [...dom.querySelectorAll(`[data-change]`)]) {
     node.onchange = actionsProto.actions[node.dataset.change];
   }
@@ -147,16 +147,21 @@ function handleAction({ target: dom, response, renderAction, key, swap }) {
       const newNodes = parse(dom, response);
       dom.append(...newNodes);
     },
-
     clear: () => ((dom.innerHTML = ""), parseListeners(document)),
-    remove: () => dom.parentElement.removeChild(dom),
+    remove: () => {
+      const nodes = parse(dom, response.join(""));
+      for (let node of [...nodes]) {
+        const keyID = Number(node.getAttribute("key"));
+        dom.querySelector(`[key="${keyID}"]`).remove();
+      }
+    },
     swap: () => {
       const [o, n] = swap;
       dom.insertBefore(dom.children[o - 1], dom.children[n - 1]);
       dom.insertBefore(dom.children[n - 1], dom.children[o - 1]);
     },
     update: function () {
-      const newNodes = [...parse(dom, response)];
+      const newNodes = [...parse(dom, response.join(""))];
       const initID = newNodes[0].getAttribute("key");
       for (let newNode of newNodes) {
         dom.childNodes[newNode.getAttribute("key") - initID].replaceWith(
@@ -170,6 +175,9 @@ function handleAction({ target: dom, response, renderAction, key, swap }) {
 
 //---  DIFFING FUNCTION ---
 function getDiffs({ v, curM, key }) {
+  /*
+  when last of list is removed, [] is received, so action would be "clear". To avoid this, we check that "oldVal" has only one elt
+  */
   if (v.length === 0 && curM.size > 1) {
     return {
       action: "clear",
@@ -183,6 +191,13 @@ function getDiffs({ v, curM, key }) {
       clone = new Map([...curM]),
       swap = [];
 
+    /* 
+      "v" is the new data as a list", and "curM" is the current map whose keys are the objects. {obj => obj.id}
+      Build 2 lists, "d" & "clone" to determine if "v" is a subset or superset or modification of curM
+      "d" should contain all new/modified objects from v not in curM
+      "clone" is a subset of curM containing all objects not in v
+      curM is appended with any new object
+      */
     for (let o of v) {
       if (curM.has(o)) {
         clone.delete(o);
@@ -192,13 +207,31 @@ function getDiffs({ v, curM, key }) {
       }
     }
 
+    /* 
+    clone contains objects in curM not in v, so we remove them
+    curM should be "v", or its map version and we detected the difference "d" between "v" and "curM"
+    */
     if (clone.size > 0) {
       for (let o of clone.keys()) {
         curM.delete(o);
       }
     }
 
-    // <-- swap
+    /*
+    REMOVE is when d.size=0 and clone.size>0 
+   
+    APPEND is when clone.size=0 and d.size>0
+    
+    UPDATE:different objects but same values: [obj1=>ob.id] => [obj2 => ob.id]
+    is when d.size == clone.size && d.size<curM.size (otherwise its an ASSIGN, all new)
+    
+    SWAP:same object but different value: [obj1 => ob.id] => [obj1 => ob.id']
+    detected below
+    
+    ASSIGN is the rest when not SWAP
+    */
+
+    // <--SWAP: occurs only when same objects, thus d.size==0
     if (d.size == 0) {
       let curE = [...curM.entries()].sort(
         ([x, y], [z, t]) => x[key] < z[key] && -1
@@ -214,25 +247,19 @@ function getDiffs({ v, curM, key }) {
     }
     // -->
 
-    let action;
-    if (clone.size == 1 && d.size == 0) {
-      action = "remove";
-    } else if (swap.length > 0) {
-      action = "swap";
-    } else if (clone.size == 0 && initSize > 0) {
-      action = "append";
-    } else if (clone.size == 0 && initSize == 0) {
-      action = "assign";
-    } else if (clone.size == d.size && d.size < curM.size) {
-      action = "update";
-    } else {
-      action = "assign";
-    }
+    let action, diff;
 
-    let diff;
-    clone.size > 0 && d.size == 0
-      ? (diff = [...clone.keys()])
-      : (diff = [...d.keys()]);
+    if (clone.size > 0 && d.size == 0) {
+      (action = "remove"), (diff = [...clone.keys()]);
+    } else if (swap.length > 0) {
+      (action = "swap"), (diff = [...d.keys()]);
+    } else if (clone.size == 0 && d.size > 0 && initSize > 0) {
+      (action = "append"), (diff = [...d.keys()]);
+    } else if (clone.size == d.size && d.size < curM.size) {
+      (action = "update"), (diff = [...d.keys()]);
+    } else {
+      (action = "assign"), (diff = v);
+    }
 
     return {
       action,

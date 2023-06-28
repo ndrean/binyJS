@@ -4,17 +4,17 @@ import B from "binyjs";
 const selected = B.state({ val: "" }),
   listed = B.state({ val: "" }),
   actions = B.Actions({
-    setSelected: (e) => {
+    setSelected: ({ target }) => {
       selected.target = fromselect;
-      selected.val = e.target.value;
+      selected.val = target.value;
     },
     showSelected: () =>
       (selected.resp = `<p key="${selected.val}">${selected.val} ${
         countries[selected.val]
       }</p>`),
-    setListed: (e) => {
+    setListed: ({ target }) => {
       listed.target = fromlist;
-      listed.val = e.target.value;
+      listed.val = target.value;
     },
     showListed: (e) => {
       e.preventDefault();
@@ -36,11 +36,11 @@ const countries = {
   "United States": "🇺🇸",
 };
 
-const Option = (country) =>
-  `<option value="${country}" >${country} ${countries[country]}</option>`;
-
 const displayOptions = (countries) =>
-  Object.keys(countries).map((country) => Option(country));
+  Object.keys(countries).map(
+    (country) =>
+      `<option value="${country}" >${country} ${countries[country]}</option>`
+  );
 
 const Select = () =>
   `<label for="selectElt">Select a country:</label>

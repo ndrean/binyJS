@@ -7,7 +7,7 @@ const todoState = B.state({ val: [], key: "id" }),
   actions = B.Actions({
     setInput: ({ data }) => {
       inputState.target = todoInput;
-      inputState.val += data;
+      inputState.val += data.trim();
     },
     removeLi: ({ target }) => {
       todoState.target = ulis;
@@ -45,7 +45,7 @@ const App = () =>
   `<div>
       <h1>Todo list minimal example with Tiny</h1>
       <form data-action="addItem" id="fm" data-submit="addItem">
-        <input type="text" id= "todoInput" data-input="setInput"/>
+        <input type="text" id= "todoInput" data-input="setInput" autofocus/>
         <button id="btn" type="submit">Add</button>
       </form>
       <ul id="ulis" data-change="display"></ul>
@@ -54,16 +54,6 @@ const App = () =>
 
 // ------------
 
-window.addEventListener("load", () => {
-  todoInput.focus();
-
-  // the "delete" checkbox is dynamically created and does not have a listener.
-  // document.addEventListener("click", ({ target }) => {
-  //   // delete is a checkbox,
-  //   if (target.type === "checkbox" && target.checked) {
-  //     return actions.removeLi(target);
-  //   }
-  // });
-});
+// window.addEventListener("load", () => todoInput.focus());
 
 app.innerHTML = App();
