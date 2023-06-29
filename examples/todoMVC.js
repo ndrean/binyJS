@@ -16,10 +16,6 @@ const leftCount = B.state({ val: 0 }),
 
       const newRow = { id: ++nextID, title: todoInput.val.trim(), done: false };
       todos.val = [...todos.val, newRow];
-      // todos.val = [
-      //   ...todos.val,
-      //   { id: ++nextID, title: todoInput.val.trim(), done: false },
-      // ];
       SessionStorage.setItem(newRow);
       // tell the counter
       leftCount.val = todos.val.filter((todo) => !todo.done).length;
