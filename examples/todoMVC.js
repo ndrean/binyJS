@@ -13,10 +13,14 @@ const leftCount = B.state({ val: 0 }),
     addItem: (e) => {
       e.preventDefault();
       if (!todoInput.val) return;
-      todos.val = [
-        ...todos.val,
-        { id: ++nextID, title: todoInput.val.trim(), done: false },
-      ];
+
+      const newRow = { id: ++nextID, title: todoInput.val.trim(), done: false };
+      todos.val = [...todos.val, newRow];
+      // todos.val = [
+      //   ...todos.val,
+      //   { id: ++nextID, title: todoInput.val.trim(), done: false },
+      // ];
+      SessionStorage.setItem(newRow);
       // tell the counter
       leftCount.val = todos.val.filter((todo) => !todo.done).length;
       newInput.reset(), (todoInput.val = "");
@@ -39,9 +43,13 @@ const leftCount = B.state({ val: 0 }),
     },
     completed: (e) => {
       const id = Number(e.target.closest("li").getAttribute("key"));
-      todos.val = [...todos.val].map((todo) =>
-        todo.id === id ? { ...todo, done: !todo.done } : todo
-      );
+      todos.val = [...todos.val].map((todo) => {
+        if (todo.id === id) {
+          SessionStorage.setItem({ id, title: todo.title, done: !todo.done });
+          return { ...todo, done: !todo.done };
+        }
+        return todo;
+      });
       //   tell the counter
       leftCount.val = todos.val.filter((todo) => !todo.done).length;
     },
@@ -49,18 +57,36 @@ const leftCount = B.state({ val: 0 }),
       const li = target.closest("li");
       const keyId = Number(li.getAttribute("key"));
       const idx = todos.val.findIndex((td) => td.id === keyId);
+      SessionStorage.removeItem(todos.val.find((todo) => todo.id === keyId));
       todos.val = [...todos.val.slice(0, idx), ...todos.val.slice(idx + 1)];
       leftCount.val = todos.val.filter((todo) => !todo.done).length;
     },
     toggleAll: ({ target }) => {
       if (target.checked) {
-        todos.val = [...todos.val].map((todo) => ({ ...todo, done: true }));
+        todos.val = [...todos.val].map((todo) => {
+          SessionStorage.setItem({
+            id: todo.id,
+            title: todo.title,
+            done: true,
+          });
+          return { ...todo, done: true };
+        });
       } else {
-        todos.val = [...todos.val].map((todo) => ({ ...todo, done: false }));
+        todos.val = [...todos.val].map((todo) => {
+          SessionStorage.setItem({
+            id: todo.id,
+            title: todo.title,
+            done: false,
+          });
+          return { ...todo, done: false };
+        });
       }
       leftCount.val = todos.val.filter((todo) => !todo.done).length;
     },
     clearCompleted: () => {
+      for (let todo of todos.val) {
+        todo.done && SessionStorage.removeItem(todo);
+      }
       todos.val = [...todos.val].filter((todo) => !todo.done);
     },
   });
@@ -111,7 +137,7 @@ const App = () =>
     <footer class="info">
       <p>Double-click to edit a todo</p>
       <p>Created by <a href="http://twitter.com/oscargodson">Oscar Godson</a></p>
-      <p>Refactored by <a href="https://github.com/cburgmer">Christoph Burgmer</a></p>
+      <p>Refactored by <a href="https://github.com/ndrean">Neven DREAN</a></p>
       <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
     </footer>
   </section>`;
@@ -121,12 +147,14 @@ window.onload = () => {
   todos.target = ulis;
   todoInput.target = inputTodo;
 
+  if (todos.val.length == 0) todos.val = SessionStorage.restore();
   history.pushState({}, "", "/#/");
   window.addEventListener("hashchange", locationHandler);
 };
 
 app.innerHTML = App();
 
+// -------
 const routes = {
   "/": () => (status.val = undefined),
   "/active": () => (status.val = false),
@@ -135,7 +163,33 @@ const routes = {
 
 const locationHandler = async () => {
   const location = window.location.hash.replace("#", "");
-  console.log(location);
   routes[location]();
   return actions.nav();
+};
+
+// --------
+
+const SessionStorage = {
+  setItem: async (row) => {
+    return Promise.resolve().then(() =>
+      sessionStorage.setItem(row.id, JSON.stringify(row))
+    );
+  },
+  getItem: async (row) => {
+    return Promise.resolve()
+      .then(() => sessionStorage.getItem(row.id))
+      .then(JSON.parse);
+  },
+  removeItem: async (row) => {
+    return Promise.resolve().then(() => sessionStorage.removeItem(row.id));
+  },
+  clear: () => sessionStorage.clear(),
+  restore: () => {
+    const data = [];
+    const keys = Object.keys(sessionStorage);
+    for (let k of keys) {
+      data.push(JSON.parse(sessionStorage.getItem(k)));
+    }
+    return data;
+  },
 };
