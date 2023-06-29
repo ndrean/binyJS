@@ -89,7 +89,7 @@ const Button = ({ id, text, deps, action }) =>
 
 const App = () =>
   `<div class="container"><div class="jumbotron"><div class="row"><div class="col-md-6"><h1>BinyJS keyed</h1></div><div class="col-md-6"><div class="row">${Button(
-    { id: "run", text: "Create 1000 rows", deps: "5", action: "create" }
+    { id: "run", text: "Create 1000 rows", deps: "1000", action: "create" }
   )}${Button({
     id: "runlots",
     text: "Create 10,000 rows",
