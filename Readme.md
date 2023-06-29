@@ -3,7 +3,7 @@
 It is a micro vanilla Javascript project of 1.4kB to help to write reactive UI.
 [![npm bundle size](https://img.badgesize.io/ndrean/binyjs/main/dist/binyjs.umd.cjs?compression=gzip)](https://bundlephobia.com/package/binyjs@0.3.3)
 
-It can handle _arrays_ as demonstrated in the "JS-framework" bench test and it demonstrates its performance is very close to the dedicated JAvascript code written for this test.
+This project was made to handle _arrays_ and calculate the diff _on the data_, as demonstrated in the "JS-framework" bench test and the todoMVC. The performance is very close to the dedicated Javascript code written for this test.
 
 It uses an immutable state and computes the diff to render the desired DOM elements.
 
@@ -11,7 +11,7 @@ You write HTML as strings with normal interpolation.
 
 It uses state variables with the convention of using "stateVariable"`.val` as a setter and getter.
 
-Instead of writing "event" listeners in your HTML (where "event" can be "click" or "submit" or "change" or "input"), you write a `dataset` and reference a function.
+Instead of writing "event" listeners in your HTML (where "event" can be "click" or "submit" or "change" or "input"), you write a `dataset` and reference a function. For example, `data-change="compute"`.
 
 It uses the key "stateVariable"`.resp` to set the rendered DOM elements.
 
