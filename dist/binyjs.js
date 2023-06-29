@@ -3,7 +3,7 @@ const A = (t) => Object.assign(Object.create(_), t), _ = {
     return this._resp;
   },
   set resp(t) {
-    this._resp = t, Array.isArray(t) || (this.renderAction = "assign", this._resp = [t]), this._resp && this._target && u({
+    this._resp = t, Array.isArray(t) || (this.renderAction = "assign", this._resp = [t]), this.renderAction || (this.renderAction = "assign"), this._resp && this._target && u({
       target: this._target,
       renderAction: this.renderAction,
       response: this._resp,
@@ -58,7 +58,7 @@ const A = (t) => Object.assign(Object.create(_), t), _ = {
       key: e.key,
       swap: e.swap,
       response: e._val
-    }) : e.target && e.target.dispatchEvent(new Event("change"))), !Array.isArray(t) && (e.oldVal = t), e._val = t;
+    }) : e.target && e.target.dispatchEvent(new Event("change"))), !Array.isArray(t) && (e.oldVal = t), e._val = t, e.renderAction = "";
   }
 }, p = {
   get actions() {
@@ -88,7 +88,7 @@ function u({ target: t, response: e, renderAction: n, key: l, swap: i }) {
   ({
     assign: () => (t.innerHTML = e.join(""), f(t)),
     append: () => {
-      const s = h(t, e);
+      const s = h(t, e.join(""));
       t.append(...s);
     },
     clear: () => (t.innerHTML = "", f(document)),
