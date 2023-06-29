@@ -1,5 +1,5 @@
 // import B from "../src/biny.js";
-import B from "binyjs";
+import B from "../src/biny.js";
 import { A, N, C } from "./constants.js";
 
 //
@@ -21,8 +21,6 @@ const buildData = (count) => {
 
 function remove(target) {
   const tg = target.closest("tr");
-  data.target = tg;
-  // if used key="id", then simply tg.id instead of getAttribute
   const keyId = Number(tg.getAttribute("key"));
   if (select.val === keyId) select.val = 0;
   const idx = data.val.findIndex((d) => d.id === keyId);
@@ -91,7 +89,7 @@ const Button = ({ id, text, deps, action }) =>
 
 const App = () =>
   `<div class="container"><div class="jumbotron"><div class="row"><div class="col-md-6"><h1>BinyJS keyed</h1></div><div class="col-md-6"><div class="row">${Button(
-    { id: "run", text: "Create 1000 rows", deps: "1000", action: "create" }
+    { id: "run", text: "Create 1000 rows", deps: "5", action: "create" }
   )}${Button({
     id: "runlots",
     text: "Create 10,000 rows",
