@@ -5,6 +5,7 @@ let nextID = 0;
 const leftCount = B.state({ val: 0 }),
   todoInput = B.state({ val: "" }),
   todos = B.state({ val: [], key: "id" }),
+  status = B.state({ val: undefined }),
   actions = B.Actions({
     getInput: ({ data }) => {
       (todoInput.target = inputTodo), (todoInput.val += data);
@@ -22,6 +23,14 @@ const leftCount = B.state({ val: 0 }),
     },
     updateTodos: () => {
       todos.resp = todos.val.map((todo) => Todo(todo));
+    },
+    nav: () => {
+      // todos.renderAction = "assign";
+      todos.resp = todos.val
+        .filter((todo) =>
+          status.val === undefined ? true : todo.done === status.val
+        )
+        .map((todo) => Todo(todo));
     },
     todosCountLeft: () => {
       leftCount.resp =
@@ -64,14 +73,14 @@ const Todo = (todo) =>
     todo.title
   }</label><input type="checkbox" data-click="removeTodo" class="destroy"/></div></li>`;
 
-const Footer = () => `<footer class="footer">
+const Nav = () => `<footer class="footer">
 <span class="todo-count" id="count" data-change="todosCountLeft"></span>
 <ul class="filters">
     <li>
-        <a href="#/" class="selected">All</a>
+        <a href="#/" class="selected" >All</a>
     </li>
     <li>
-        <a href="#/active">Active</a>
+        <a href="#/active" >Active</a>
     </li>
     <li>
         <a href="#/completed">Completed</a>
@@ -79,6 +88,9 @@ const Footer = () => `<footer class="footer">
 </ul>
 <button class="clear-completed" data-click="clearCompleted">Clear completed</button>
 </footer>`;
+
+const Todos = () =>
+  `<ul class="todo-list" id="ulis" data-change="updateTodos"></ul>`;
 
 const App = () =>
   `<section class="todoapp">
@@ -94,22 +106,37 @@ const App = () =>
     <section class="main">
         <input id="toggle-all" class="toggle-all" type="checkbox" data-click="toggleAll">
         <label for="toggle-all">Mark all as complete</label>
-        <ul class="todo-list" id="ulis" data-change="updateTodos">
-        </ul>
+        ${Todos()}
     </section>
-    ${Footer()}
-</section>
-<footer class="info">
-    <p>Double-click to edit a todo</p>
-    <p>Created by <a href="http://twitter.com/oscargodson">Oscar Godson</a></p>
-    <p>Refactored by <a href="https://github.com/cburgmer">Christoph Burgmer</a></p>
-    <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
-</footer>`;
+    ${Nav()}
+    <footer class="info">
+      <p>Double-click to edit a todo</p>
+      <p>Created by <a href="http://twitter.com/oscargodson">Oscar Godson</a></p>
+      <p>Refactored by <a href="https://github.com/cburgmer">Christoph Burgmer</a></p>
+      <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+    </footer>
+  </section>`;
 
 window.onload = () => {
   leftCount.target = count;
   todos.target = ulis;
   todoInput.target = inputTodo;
+
+  history.pushState({}, "", "/#/");
+  window.addEventListener("hashchange", locationHandler);
 };
 
 app.innerHTML = App();
+
+const routes = {
+  "/": () => (status.val = undefined),
+  "/active": () => (status.val = false),
+  "/completed": () => (status.val = true),
+};
+
+const locationHandler = async () => {
+  const location = window.location.hash.replace("#", "");
+  console.log(location);
+  routes[location]();
+  return actions.nav();
+};

@@ -9,6 +9,8 @@ const stateProto = {
 
     if (!Array.isArray(r)) (this.renderAction = "assign"), (this._resp = [r]);
 
+    this.renderAction ||= "assign";
+
     this._resp &&
       this._target &&
       handleAction({
@@ -92,7 +94,7 @@ const stateProto = {
     }
 
     !Array.isArray(v) && (state.oldVal = v);
-    state._val = v;
+    (state._val = v), (state.renderAction = "");
   },
 };
 
@@ -144,7 +146,7 @@ function handleAction({ target: dom, response, renderAction, key, swap }) {
   const ActionMapping = {
     assign: () => ((dom.innerHTML = response.join("")), parseListeners(dom)),
     append: () => {
-      const newNodes = parse(dom, response);
+      const newNodes = parse(dom, response.join(""));
       dom.append(...newNodes);
     },
     clear: () => ((dom.innerHTML = ""), parseListeners(document)),

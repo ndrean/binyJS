@@ -56,7 +56,6 @@ const data = B.state({ val: [], key: "id" }),
   actions = B.Actions({
     clear: () => ((data.target = tbody), (select.val = 0), (data.val = [])),
     select: ({ target }) => {
-      console.log(target);
       document
         .querySelector(`[key="${select.val}"]`)
         ?.classList.remove("danger");
