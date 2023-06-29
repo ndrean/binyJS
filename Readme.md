@@ -112,7 +112,7 @@ const TodoItem = ({ id, label }) =>
 - [data-change] is the _default callback_. For example, you have a form with a `data-submit`:
 
 ```html
-<form data-action="addItem" id="fm" data-submit="addItem"></form>
+<form id="fm" data-submit="addItem"></form>
 ```
 
 This triggers the action below:
