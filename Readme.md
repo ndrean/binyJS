@@ -17,7 +17,7 @@ It uses the key "stateVariable"`.resp` to set the rendered DOM elements.
 
 It relies on _unique keys_; you need to use the `key` attribute in the HTML to identify each element of the rendered DOM array. You need to pass to the state variable the unique identifier you use in your data (eg `key: "id"`). Both "key" are different.
 
-> Limitations: it is not fully reactive in the sense that if you have a cascade of dependencies between state variables, then you need to be explicit and mutate the dependent state variable. For example, you have a list of todos, completed or not. Suppose you have a counter on the total completed todos as a state variable. In the action where you change the completion of a todo, you need to modify of the counter state accordingly for the counter to be reactive. The "todoMVC" demonstrates this.
+> Limitations: it is not fully reactive in the sense that you need to create a separate state variable for computed state. For example, you have a list of todos, completed or not. Suppose you have a counter on the total completed todos as a state variable. In the action where you change the completion of a todo, you need to modify of the counter state accordingly for the counter to be reactive. The "todoMVC" demonstrates this.
 
 ## Usage
 
