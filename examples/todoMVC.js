@@ -1,4 +1,4 @@
-import B from "binyjs";
+import B from "../src/biny.js";
 
 let nextID = 0;
 

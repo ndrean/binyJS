@@ -155,9 +155,6 @@ The performance is close to the Vanilla [JS code specific for this test](https:/
 
 ## Examples
 
-The running bench example:
-<https://githubbox.com/ndrean/binyJS/blob/main/examples/bench.js>
-
 The code for the examples:
 
 - the famous counter: <https://github.com/ndrean/binyJS/blob/main/examples/button.js>
@@ -166,4 +163,4 @@ The code for the examples:
 - a basic "todo" list: <https://github.com/ndrean/binyJS/blob/main/examples/todo.js>
 
 - the famous TODOMVC: <https://github.com/ndrean/binyJS/blob/main/examples/todoMVC.js>
-- the bench framework test: <https://github.com/ndrean/binyJS/blob/main/examples/bench.js>.
+- the bench JS-framework test: <https://github.com/ndrean/binyJS/blob/main/examples/bench.js>.
