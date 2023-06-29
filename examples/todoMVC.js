@@ -1,4 +1,4 @@
-import B from "../../src/biny";
+import B from "binyjs";
 
 let nextID = 0;
 
@@ -25,7 +25,6 @@ const leftCount = B.state({ val: 0 }),
       todos.resp = todos.val.map((todo) => Todo(todo));
     },
     nav: () => {
-      // todos.renderAction = "assign";
       todos.resp = todos.val
         .filter((todo) =>
           status.val === undefined ? true : todo.done === status.val
