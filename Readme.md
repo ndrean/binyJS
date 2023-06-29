@@ -161,10 +161,9 @@ The running bench example:
 The code for the examples:
 
 - the famous counter: <https://github.com/ndrean/binyJS/blob/main/examples/button.js>
--
+- a Select and Datalist: <https://github.com/ndrean/binyJS/blob/main/examples/select.js>
+
 - a basic "todo" list: <https://github.com/ndrean/binyJS/blob/main/examples/todo.js>
 
+- the famous TODOMVC: <https://github.com/ndrean/binyJS/blob/main/examples/todoMVC.js>
 - the bench framework test: <https://github.com/ndrean/binyJS/blob/main/examples/bench.js>.
-
-- select and datalist: <https://github.com/ndrean/binyJS/blob/main/examples/select.js>
-- TODOMVC
