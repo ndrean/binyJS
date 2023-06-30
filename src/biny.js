@@ -49,24 +49,24 @@ const stateProto = {
   get val() {
     return this._val;
   },
-  set val(v) {
+  set val(newVector) {
     const state = this,
       key = state.key ?? "id";
 
-    state._val = v;
+    state._val = newVector;
 
-    if (Array.isArray(v)) {
+    if (Array.isArray(newVector)) {
       !state.oldVal && (state.oldVal = new Map());
 
       if (state.target) {
-        const { diff, action, curM, swap } = getDiffs({
-          v,
-          curM: new Map([...state.oldVal]),
+        const { diff, action, curMap, swap } = getDiffs({
+          newVector,
+          curMap: new Map([...state.oldVal]),
           key,
         });
 
         state.swap = swap;
-        state.oldVal = curM;
+        state.oldVal = curMap;
         state._val = diff;
         state.renderAction = action;
       }
@@ -176,46 +176,46 @@ function handleAction({ target: dom, response, renderAction, key, swap }) {
 }
 
 //---  DIFFING FUNCTION ---
-function getDiffs({ v, curM, key }) {
+function getDiffs({ newVector, curMap, key }) {
   /*
-  when last of list is removed, [] is received, so action would be "clear". To avoid this, we check that "oldVal" has only one elt
+  when last of list is remonewVectored, [] is receinewVectored, so action would be "clear". To avoid this, we check that "oldVal" has only one elt
   */
-  if (v.length === 0 && curM.size > 1) {
+  if (newVector.length === 0 && curMap.size > 1) {
     return {
       action: "clear",
-      curM: new Map(),
+      curMap: new Map(),
       diff: [],
       swap: [],
     };
   } else {
-    const initSize = curM.size,
+    const initSize = curMap.size,
       d = new Map(),
-      clone = new Map([...curM]),
+      clone = new Map([...curMap]),
       swap = [];
 
     /* 
-      "v" is the new data as a list", and "curM" is the current map whose keys are the objects. {obj => obj.id}
-      Build 2 lists, "d" & "clone" to determine if "v" is a subset or superset or modification of curM
-      "d" should contain all new/modified objects from v not in curM
-      "clone" is a subset of curM containing all objects not in v
-      curM is appended with any new object
+      "v" is the new data as a list", and "curMap" is the current map whose keys are the objects. {obj => obj.id}
+      Build 2 lists, "d" & "clone" to determine if "v" is a subset or superset or modification of curMap
+      "d" should contain all new/modified objects from v not in curMap
+      "clone" is a subset of curMap containing all objects not in v
+      curMap is appended with any new object
       */
-    for (let o of v) {
-      if (curM.has(o)) {
+    for (let o of newVector) {
+      if (curMap.has(o)) {
         clone.delete(o);
       } else {
-        curM.set(o, o[key]);
+        curMap.set(o, o[key]);
         d.set(o, o[key]);
       }
     }
 
     /* 
-    clone contains objects in curM not in v, so we remove them
-    curM should be "v", or its map version and we detected the difference "d" between "v" and "curM"
+    clone contains objects in curMap not in newVector, so we remove them
+    curMap should be "newVector", or its map version and we detected the difference "d" between "newVector" and "curMap"
     */
     if (clone.size > 0) {
       for (let o of clone.keys()) {
-        curM.delete(o);
+        curMap.delete(o);
       }
     }
 
@@ -225,7 +225,7 @@ function getDiffs({ v, curM, key }) {
     APPEND is when clone.size=0 and d.size>0
     
     UPDATE:different objects but same values: [obj1=>ob.id] => [obj2 => ob.id]
-    is when d.size == clone.size && d.size<curM.size (otherwise its an ASSIGN, all new)
+    is when d.size == clone.size && d.size<curMap.size (otherwise its an ASSIGN, all new)
     
     SWAP:same object but different value: [obj1 => ob.id] => [obj1 => ob.id']
     detected below
@@ -235,14 +235,14 @@ function getDiffs({ v, curM, key }) {
 
     // <--SWAP: occurs only when same objects, thus d.size==0
     if (d.size == 0) {
-      let curE = [...curM.entries()].sort(
+      let curE = [...curMap.entries()].sort(
         ([x, y], [z, t]) => x[key] < z[key] && -1
       );
 
       for (let [i, o] of [...v.entries()]) {
         if (o[key] !== curE[i][1]) {
           swap.push(i + 1);
-          curM.set(curE[i][0], o[key]);
+          curMap.set(curE[i][0], o[key]);
         }
       }
       curE = [];
@@ -257,16 +257,16 @@ function getDiffs({ v, curM, key }) {
       (action = "swap"), (diff = [...d.keys()]);
     } else if (clone.size == 0 && d.size > 0 && initSize > 0) {
       (action = "append"), (diff = [...d.keys()]);
-    } else if (clone.size == d.size && d.size < curM.size) {
+    } else if (clone.size == d.size && d.size < curMap.size) {
       (action = "update"), (diff = [...d.keys()]);
     } else {
-      (action = "assign"), (diff = v);
+      (action = "assign"), (diff = newVector);
     }
 
     return {
       action,
       diff,
-      curM,
+      curMap,
       swap: swap.sort(),
     };
   }
