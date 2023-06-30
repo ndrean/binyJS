@@ -43,7 +43,7 @@ const TodoItem = ({ id, label }) =>
 
 const App = () =>
   `<div>
-      <h1>Todo list minimal example with Tiny</h1>
+      <h1>Todo list minimal example with Biny</h1>
       <form data-action="addItem" id="fm" data-submit="addItem">
         <input type="text" id= "todoInput" data-input="setInput" autofocus/>
         <button id="btn" type="submit">Add</button>
