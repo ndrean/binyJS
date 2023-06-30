@@ -239,7 +239,7 @@ function getDiffs({ newVector, curMap, key }) {
         ([x, y], [z, t]) => x[key] < z[key] && -1
       );
 
-      for (let [i, o] of [...v.entries()]) {
+      for (let [i, o] of [...newVector.entries()]) {
         if (o[key] !== curE[i][1]) {
           swap.push(i + 1);
           curMap.set(curE[i][0], o[key]);
