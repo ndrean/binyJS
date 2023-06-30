@@ -162,5 +162,5 @@ The code for the examples:
 
 - a basic "todo" list: <https://github.com/ndrean/binyJS/blob/main/examples/todo.js>
 
-- the famous TODOMVC: <https://github.com/ndrean/binyJS/blob/main/examples/todoMVC/todoMVC.js>
-- the bench JS-framework test: <https://github.com/ndrean/binyJS/blob/main/examples/jsbench/bench.js>.
+- the famous TODOMVC: <https://github.com/ndrean/binyJS/blob/main/examples/todoMVC.js>
+- the bench JS-framework test: <https://github.com/ndrean/binyJS/blob/main/examples/bench.js>.
