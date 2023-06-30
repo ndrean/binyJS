@@ -93,8 +93,8 @@ const stateProto = {
       }
     }
 
-    !Array.isArray(v) && (state.oldVal = v);
-    (state._val = v), (state.renderAction = "");
+    !Array.isArray(newVector) && (state.oldVal = newVector);
+    (state._val = newVector), (state.renderAction = "");
   },
 };
 
