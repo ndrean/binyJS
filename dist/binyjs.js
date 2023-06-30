@@ -40,12 +40,12 @@ const A = (t) => Object.assign(Object.create(_), t), _ = {
   set val(t) {
     const e = this, s = e.key ?? "id";
     if (e._val = t, Array.isArray(t) && (!e.oldVal && (e.oldVal = /* @__PURE__ */ new Map()), e.target)) {
-      const { diff: c, action: i, curMap: l, swap: n } = w({
+      const { diff: c, action: n, curMap: l, swap: i } = w({
         newVector: t,
         curMap: new Map([...e.oldVal]),
         key: s
       });
-      e.swap = n, e.oldVal = l, e._val = c, e.renderAction = i;
+      e.swap = i, e.oldVal = l, e._val = c, e.renderAction = n;
     }
     if (e.renderAction === "clear")
       return u({
@@ -84,28 +84,28 @@ function h(t, e) {
   let c;
   return s === "TBODY" ? c = new DOMParser().parseFromString(`<table><tbody>${e}</tbody></table>`, "text/html").querySelector("tbody") : c = new DOMParser().parseFromString(`<${s}>${e}</${s}>`, "text/html").querySelector(s), p(c), c.childNodes;
 }
-function u({ target: t, response: e, renderAction: s, key: c, swap: i }) {
+function u({ target: t, response: e, renderAction: s, key: c, swap: n }) {
   ({
     assign: () => (t.innerHTML = e.join(""), p(t)),
     append: () => {
-      const n = h(t, e.join(""));
-      t.append(...n);
+      const i = h(t, e.join(""));
+      t.append(...i);
     },
     clear: () => (t.innerHTML = "", p(document)),
     remove: () => {
-      const n = h(t, e.join(""));
-      for (let r of [...n]) {
+      const i = h(t, e.join(""));
+      for (let r of [...i]) {
         const o = Number(r.getAttribute("key"));
         t.querySelector(`[key="${o}"]`).remove();
       }
     },
     swap: () => {
-      const [n, r] = i;
-      t.insertBefore(t.children[n - 1], t.children[r - 1]), t.insertBefore(t.children[r - 1], t.children[n - 1]);
+      const [i, r] = n;
+      t.insertBefore(t.children[i - 1], t.children[r - 1]), t.insertBefore(t.children[r - 1], t.children[i - 1]);
     },
     update: function() {
-      const n = [...h(t, e.join(""))], r = n[0].getAttribute("key");
-      for (let o of n)
+      const i = [...h(t, e.join(""))], r = i[0].getAttribute("key");
+      for (let o of i)
         t.childNodes[o.getAttribute("key") - r].replaceWith(
           o
         );
@@ -121,33 +121,33 @@ function w({ newVector: t, curMap: e, key: s }) {
       swap: []
     };
   {
-    const c = e.size, i = /* @__PURE__ */ new Map(), l = new Map([...e]), n = [];
+    const c = e.size, n = /* @__PURE__ */ new Map(), l = new Map([...e]), i = [];
     for (let a of t)
-      e.has(a) ? l.delete(a) : (e.set(a, a[s]), i.set(a, a[s]));
+      e.has(a) ? l.delete(a) : (e.set(a, a[s]), n.set(a, a[s]));
     if (l.size > 0)
       for (let a of l.keys())
         e.delete(a);
-    if (i.size == 0) {
+    if (n.size == 0) {
       let a = [...e.entries()].sort(
         ([d, g], [y, b]) => d[s] < y[s] && -1
       );
-      for (let [d, g] of [...v.entries()])
-        g[s] !== a[d][1] && (n.push(d + 1), e.set(a[d][0], g[s]));
+      for (let [d, g] of [...t.entries()])
+        g[s] !== a[d][1] && (i.push(d + 1), e.set(a[d][0], g[s]));
       a = [];
     }
     let r, o;
-    return l.size > 0 && i.size == 0 ? (r = "remove", o = [...l.keys()]) : n.length > 0 ? (r = "swap", o = [...i.keys()]) : l.size == 0 && i.size > 0 && c > 0 ? (r = "append", o = [...i.keys()]) : l.size == i.size && i.size < e.size ? (r = "update", o = [...i.keys()]) : (r = "assign", o = t), {
+    return l.size > 0 && n.size == 0 ? (r = "remove", o = [...l.keys()]) : i.length > 0 ? (r = "swap", o = [...n.keys()]) : l.size == 0 && n.size > 0 && c > 0 ? (r = "append", o = [...n.keys()]) : l.size == n.size && n.size < e.size ? (r = "update", o = [...n.keys()]) : (r = "assign", o = t), {
       action: r,
       diff: o,
       curMap: e,
-      swap: n.sort()
+      swap: i.sort()
     };
   }
 }
-const z = {
+const v = {
   state: A,
   Actions: k
 };
 export {
-  z as default
+  v as default
 };
