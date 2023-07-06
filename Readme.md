@@ -1,6 +1,7 @@
 # BinyJS
 
-It is a micro vanilla Javascript project of 1.4kB to help to write reactive UI.
+It is a micro vanilla Javascript project of 1.4kB to help to write reactive UI based on **event-driven** programming.
+
 [![npm bundle size](https://img.badgesize.io/ndrean/binyjs/main/dist/binyjs.umd.cjs?compression=gzip)](https://bundlephobia.com/package/binyjs@0.3.3)
 
 This project was made to handle _arrays_ and calculate the diff _on the data_, as demonstrated in the "JS-framework" bench test and the todoMVC. The performance is very close to the dedicated Javascript code written for this test. It uses **event-driven** programming: you write to the state and this triggers events with callbacks.
