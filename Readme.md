@@ -1,6 +1,6 @@
 # BinyJS
 
-It is a micro vanilla Javascript project of 1.4kB to help to write reactive UI based on **event-driven** programming.
+It is a micro vanilla Javascript project of 1.4kB to help to write reactive UI based on **event-driven** programming, aka "signals".
 
 [![npm bundle size](https://img.badgesize.io/ndrean/binyjs/main/dist/binyjs.umd.cjs?compression=gzip)](https://bundlephobia.com/package/binyjs@0.3.3)
 
