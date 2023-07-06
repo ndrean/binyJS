@@ -28,23 +28,11 @@ const stateProto = {
   set key(k) {
     this._key = k;
   },
-  get deps() {
-    return this._deps;
-  },
-  set deps(d) {
-    this._deps = d;
-  },
   get target() {
     return this._target;
   },
   set target(t) {
     this._target = t;
-  },
-  get action() {
-    return this._action;
-  },
-  set action(a) {
-    this._action = a;
   },
   get val() {
     return this._val;

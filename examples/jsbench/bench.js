@@ -1,5 +1,6 @@
 // import B from "../src/biny.js";
 import B from "binyjs";
+// import B from "../../src/biny";
 import { A, N, C } from "./constants.js";
 
 //
